@@ -349,6 +349,8 @@ public class Conexion {
         
          if(clase.equalsIgnoreCase("order"))
                sql = "select * from fieldconfigure";
+         else if(clase.equalsIgnoreCase("product"))
+                 sql = "select * from fieldconfigureproduct";
          else
                sql = "select * from fieldconfigureclient";
         
@@ -563,6 +565,23 @@ public class Conexion {
             try {
                 st = (Statement) cn.con.createStatement();
                 rs = st.executeQuery("select * from fieldconfigure where shippingName = '" + campo + "'");
+
+                while (rs.next()) {
+                    return rs.getString("dbName");
+                }
+              //  cn.con.close();
+            } catch (Exception e) {
+                 JOptionPane.showMessageDialog(null, "Search error trying to get the fields from database");
+                 return "ErrorBase";
+            }
+
+            return "error";
+        }
+        else if(tipo.equalsIgnoreCase("product"))
+        {
+            try {
+                st = (Statement) cn.con.createStatement();
+                rs = st.executeQuery("select * from fieldconfigureproduct where shippingName = '" + campo + "'");
 
                 while (rs.next()) {
                     return rs.getString("dbName");
@@ -1708,6 +1727,146 @@ public class Conexion {
             
         
         return 1;
+    }
+    
+    
+    
+    public static ArrayList<String[][]> cargarArchivoProductos(String ruta) {
+        
+        //vaciarTabla();
+        Path filePath = Paths.get(ruta);
+        String vectorDatos[][];
+        String vectorDatosTmp[][];
+        String vectorDatosCopia[][];
+        ArrayList<String[][]> datos = new ArrayList<>();
+        //ArrayList<String[]> datosRutas = new ArrayList<>();
+        //datosRutas = cargarArchivoRutas(rutaRoutes);
+        //System.out.println(datosRutas.get(0)[0]);
+        Conexion cn = new Conexion();
+        try {
+            BufferedReader bf = Files.newBufferedReader(filePath);
+            String linea;
+            String encabezados = "";
+            String[] encabezadosVector;
+            String[] encabezadoCampos;
+            StringBuilder dato;
+            String nameAnterior = "";
+            int posicionAddress = 0;
+            boolean primeraLinea = true;
+            int numeroDatos = 0;
+            if (primeraLinea) {
+                encabezados = bf.readLine();
+                for (int i = 0; i < encabezados.length(); i++) {
+                    if (encabezados.charAt(i) == ',') {
+                        numeroDatos++;
+                    }
+                }
+            }
+            encabezadosVector = encabezados.split(",");
+            int campos[] = validarCampos(encabezadosVector,"");
+            encabezadoCampos = new String[campos.length];
+            for (int i = 0; i < campos.length; i++) {
+                encabezadoCampos[i] = encabezadosVector[campos[i]];
+            }
+
+            vectorDatos = new String[1][numeroDatos];
+            vectorDatosTmp = new String[1][numeroDatos];
+            vectorDatosCopia = new String[1][numeroDatos];
+            int contadorDatos = 0;
+            //Recorremos las lineas del archivo
+            while ((linea = bf.readLine()) != null) {
+                dato = new StringBuilder("");
+                //Recorremos los caracteres de la linea leida
+                for (int i = 0; i < linea.length(); i++) {
+                    //Si la linea leida es igual a una coma es por que viene un nuevo dato
+                    if (linea.charAt(i) == ',') {
+                        //Agregamos el dato al array y formateamos la cadena
+                        vectorDatos[0][contadorDatos] = dato.toString();
+                        contadorDatos++;
+                        dato = new StringBuilder("");
+                        //Se pregunta que el siguiente caracter este dentro de la variable linea
+                        if (i + 1 < linea.length()) {
+                            //Se pregunta si el caracter que sigue a la coma es un '"' esto nos indica que leeremos una cadena
+                            //que puede contener comas en su interior
+                            if (linea.charAt(i + 1) == '"') {
+                                i = i + 2;
+                                while (linea.charAt(i) != '"') {
+                                    dato.append(linea.charAt(i));
+                                    i++;
+                                }
+
+                            } else {
+                                if (linea.charAt(i) != ',') {
+                                    dato.append(linea.charAt(i));
+                                }
+                            }
+                        }
+                    } else {
+                        if (linea.charAt(i) != ',') {
+                            dato.append(linea.charAt(i));
+                        }
+                    }
+                }
+                //order.setShippingName(vector[15]);
+                //agreagarDatos(order);
+                // String[] datosLinea = linea.split(",");
+                // System.out.println(datos.get(0));
+                int contadorTmp = 0;
+                
+                    // vectorDatosTmp = new String[1][numeroDatos];
+                    //Se recorre la lista de campos para agregar solo los campos necesarios
+                    for (int j = 0; j < campos.length; j++) {
+                        
+                        vectorDatosTmp[0][contadorTmp] = vectorDatos[0][campos[j]];
+                        // System.out.println(vectorDatos[0][campos[j]]);
+                        contadorTmp++;
+                    }
+                    datos.add(vectorDatosTmp);
+                    crearCliente(encabezadoCampos, vectorDatosTmp, cn);
+                    // System.out.println("vector"+vectorDatosTmp[0][2]);
+                    contadorDatos = 0;
+                    nameAnterior = vectorDatos[0][0];
+                    vectorDatos = new String[1][numeroDatos];
+                
+            }
+        } catch (IOException e) {
+             JOptionPane.showMessageDialog(null, "An error has occurred reading the file, please check the file path");
+             return null;
+        }
+        JOptionPane.showMessageDialog(null, "The clients file has been uploaded succesfully");
+        return datos;
+    }
+    
+    public static void crearOrdenProducto(String encabezados[], /*ArrayList<String[][]>*/ String[][] datos,  Conexion cn) {
+        cn = new Conexion();
+        Product product;
+        String campoAddress = "";
+        String campoTabla = "";
+        String cadDia = "";
+        String cadMes = "";
+
+        product = new Product();
+        // System.out.println("Copia"+datos[0][0]+datos[0][1]+datos[0][2]+datos[0][3]+datos[0][4]+datos[0][5]+datos[0][6]+datos[0][7]+datos[0][8]+datos[0][9]+datos[0][10]+datos[0][11]);
+        for (int i = 0; i < datos.length; i++) {
+
+            for (int j = 0; j < encabezados.length; j++) {
+                campoTabla = buscarEnFieldConfigure(encabezados[j], cn, "product");
+                //System.out.println("FieldConfigure: " + buscarEnFieldConfigure(encabezados[j], cn));
+                if(campoTabla.equalsIgnoreCase("ErrorBase")){
+                    return;
+                }else if (campoTabla.equalsIgnoreCase("name")) {
+                    product.setNombre(datos[0][j]);
+                    //      System.out.println("datos: "+datos[0][j]);
+                } else if (campoTabla.equalsIgnoreCase("saleValue")) {
+                    product.setSaleValue(Double.parseDouble(datos[0][j]));
+                }
+            }
+
+          
+            insertarDatos(product, cn);
+            // cn.con.close();
+        }
+        // return order;
     }
       
 }
