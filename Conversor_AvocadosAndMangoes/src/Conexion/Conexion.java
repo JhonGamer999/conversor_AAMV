@@ -1542,7 +1542,7 @@ public class Conexion {
     }
       
       
-        public static int validarClientes() {
+     public static int validarClientes(String ruta) {
 
         Conexion cn = new Conexion();
         Statement st;
@@ -1550,7 +1550,6 @@ public class Conexion {
         String    name;
         String    address;
         String    phone;
-        
         
         try {
             st = (Statement) cn.con.createStatement();
@@ -1561,7 +1560,7 @@ public class Conexion {
                 address = rs.getString("address");
                 phone = rs.getString("shippingPhone");
                 
-                validarClientesRepetidos(name, address, phone);
+                generarArchivoClientesRepetidos(name, address, phone, ruta);
             }
                 
             cn.con.close();
@@ -1573,28 +1572,47 @@ public class Conexion {
         return 1;
     }
       
-      public static int validarClientesRepetidos(String name, String address, String phone) {
+      public static int generarArchivoClientesRepetidos(String name, String address, String phone, String ruta) {
 
         Conexion cn = new Conexion();
         Statement st;
         ResultSet rs;
-        String phoneRepet;
-
-        try {
-            st = (Statement) cn.con.createStatement();
-            rs = st.executeQuery("select * from clients where name = \""+name+"\" and address = \""+address+"\" and shippingPhone <> \""+phone+"\"");
-            while (rs.next()) {
-                System.out.println(name);
-                phoneRepet = rs.getString("shippingPhone");
-                
-                actualizarOrdenes(phone, phoneRepet);
-                //eliminarCliente(phoneRepet);
+        String phoneRepeated;
+        String contenido;
+        
+         try {
+            File file = new File(ruta);
+            FileWriter fw = new FileWriter(file);
+            BufferedWriter bw = new BufferedWriter(fw);
+            
+            // Si el archivo no existe es creado
+            if (!file.exists()) {
+                file.createNewFile();
+                String encabezado = "Name;Address;OldPhone;NewPhone;\n";
+                bw.write(encabezado);
             }
-                
-            cn.con.close();
+          
+           
+            try {
+               st = (Statement) cn.con.createStatement();
+               rs = st.executeQuery("select * from clients where name = \""+name+"\" and address = \""+address+"\" and shippingPhone <> \""+phone+"\"");
+                while (rs.next()) {
+                    phoneRepeated = rs.getString("shippingPhone");
+                    
+                    contenido = name+";"+address+";"+phone+";"+phoneRepeated+";\n";
+                    bw.write(contenido);
+                    
+                    contenido = "";
+                }
+                cn.con.close();
+            } catch (Exception e) {
+                 JOptionPane.showMessageDialog(null, "An error has occurred trying to connect to database"+e);
+                 return 0;
+            }
+            
+            bw.close();
         } catch (Exception e) {
-             JOptionPane.showMessageDialog(null, "Error trying to validate the clients table"+e);
-             System.out.println(e);
+             JOptionPane.showMessageDialog(null, "Error trying to write the file, please check the export path");
              return 0;
         }
         
@@ -1638,7 +1656,59 @@ public class Conexion {
              return 0;
         }
     }
-      
+    
+    public static int actualizarClienteRepetido(String phone) {
+
+        Conexion cn = new Conexion();
+        Statement st;
+        ResultSet rs;
+        String    name;
+        String    address;
+        
+        try {
+            st = (Statement) cn.con.createStatement();
+            rs = st.executeQuery("select * from clients where shippingPhone = '"+phone+"'");
+            while (rs.next()) {
+                
+                name = rs.getString("name");
+                address = rs.getString("address");
+                
+                validarClientesRepetidos(name, address, phone);
+            }
+                
+            cn.con.close();
+        } catch (Exception e) {
+             JOptionPane.showMessageDialog(null, "Error trying to read the clients table"+e);
+             return 0;
+        }
+        
+        return 1;
+    }
+     
+    public static int validarClientesRepetidos(String name, String address, String phone) {
+
+        Conexion cn = new Conexion();
+        Statement st;
+        ResultSet rs;
+        String phoneRepeated;
+        
+            try {
+               st = (Statement) cn.con.createStatement();
+               rs = st.executeQuery("select * from clients where name = \""+name+"\" and address = \""+address+"\" and shippingPhone <> \""+phone+"\"");
+                while (rs.next()) {
+                    phoneRepeated = rs.getString("shippingPhone");
+                    actualizarOrdenes( phone, phoneRepeated);
+                    eliminarCliente(phoneRepeated);
+                }
+                cn.con.close();
+            } catch (Exception e) {
+                 JOptionPane.showMessageDialog(null, "An error has occurred trying to connect to database"+e);
+                 return 0;
+            }
+            
+        
+        return 1;
+    }
       
 }
 

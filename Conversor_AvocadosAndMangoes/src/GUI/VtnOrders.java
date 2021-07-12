@@ -411,6 +411,14 @@ public class VtnOrders extends javax.swing.JFrame {
         {
             JOptionPane.showMessageDialog(this, "The historic has been upload");
         }
+        String rutaArchivo;
+        
+         rutaArchivo = JOptionPane.showInputDialog(this, "Export path: ");
+        
+        rutaArchivo = rutaArchivo + "\\clientsRep.csv";
+        
+        if(Conexion.validarClientes(rutaArchivo) == 1)
+            JOptionPane.showMessageDialog(this, "The file has been exported succesfully \n"+rutaArchivo, null, 1);
     }//GEN-LAST:event_cargarHistorialActionPerformed
 
     public void irA(JFrame ventana){
