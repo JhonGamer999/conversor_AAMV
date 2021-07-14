@@ -608,7 +608,7 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
             Object O[]=null;
             int columnas = 0;
              st = (Statement) cnx.con.createStatement();
-                rs = st.executeQuery("select * from products");
+                rs = st.executeQuery("select * from hproducts");
                 while (rs.next()) {
                    
                 

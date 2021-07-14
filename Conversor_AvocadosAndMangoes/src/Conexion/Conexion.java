@@ -6,6 +6,7 @@
 package Conexion;
 
 import Clases.Client;
+import Clases.HProduct;
 import Clases.Order;
 import Clases.Product;
 import java.io.BufferedReader;
@@ -58,7 +59,7 @@ public class Conexion {
         
         ArrayList<String> direcciones = new ArrayList<>();
         ArrayList<String[][]> datos = new ArrayList<>();
-        ArrayList<Product> productos = new ArrayList<>();
+        ArrayList<HProduct> productos = new ArrayList<>();
         //cargarArchivo("C:\\Users\\diego\\Desktop\\Archivos varios\\datosAvocados\\ordenes.csv");
         //formatearTelefono("+1234567");
         //cargarArchivoClientesManuales("C:\\Users\\diego\\Desktop\\Archivos varios\\datosAvocados\\clientes3.csv");
@@ -71,13 +72,13 @@ public class Conexion {
         // escribirArchivoHOrdersXFecha("14/05/2021", "14/08/2021", "C:\\Users\\diego\\Desktop\\Archivos varios\\datosAvocados\\horders.csv");
        // escribirArchivoClientes("C:\\Users\\diego\\Desktop\\Archivos varios\\datosAvocados\\Clientes.csv");
       //  escribirArchivoClientesCambio("C:\\Users\\diego\\Desktop\\Archivos varios\\datosAvocados\\clientesCambio.csv");
-       /* productos = llenarTablaProductos();
-        
+       // productos = llenarTablaProductos();
+        cargarArchivoProductos("C:\\Users\\diego\\Desktop\\Archivos varios\\datosAvocados\\products1.csv");
+       /*
+        for (HProduct producto : productos) {
+            System.out.println(producto.getNombre()+";"+producto.getCantidad());
+        }*/
        
-        for (Product producto : productos) {
-            System.out.println(producto.getNombre()+";"+producto.getCantidad()+";"+producto.getValor());
-        }
-       */
     }
     
 
@@ -150,7 +151,7 @@ public class Conexion {
             }
         } else if (object instanceof Order) {
             try {
-                PreparedStatement PS = cn.con.prepareStatement("insert into orders ( id, codeSP, stop, shippingPhone, shippingName, address, address2, city, postalCode, itemName, cant, value, total, payment, comments, date) values (null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,? )");
+                PreparedStatement PS = cn.con.prepareStatement("insert into orders ( id, codeSP, stop, shippingPhone, shippingName, address, address2, city, postalCode, itemName, cant, value, total, payment, comments, date, skuCode) values (null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,? )");
                 PS.setString(1, ((Order) object).getCodeSP());
                 PS.setInt(2, ((Order) object).getStop());
                 PS.setString(3, ((Order) object).getShippingPhone());
@@ -166,6 +167,7 @@ public class Conexion {
                 PS.setString(13, ((Order) object).getPayment());
                 PS.setString(14, ((Order) object).getComments());
                 PS.setString(15, ((Order) object).getDate());
+                PS.setString(16, ((Order) object).getSkuCode());
                 PS.executeUpdate();
 
                 cn.con.close();
@@ -174,11 +176,25 @@ public class Conexion {
             }
         } else if ( object instanceof Product){
             try {
-                PreparedStatement PS = cn.con.prepareStatement("insert into products ( id, name, purchaseValue, saleValue, quantity) values (null,?,?,?,? )");
+                PreparedStatement PS = cn.con.prepareStatement("insert into products ( id, name, skuCode, purchaseValue) values (null,?,?,? )");
                 PS.setString(1, ((Product) object).getNombre());
-                PS.setDouble(2, ((Product) object).getPurchaseValue());
-                PS.setDouble(3, ((Product) object).getSaleValue());
-                PS.setInt(4, ((Product) object).getCantidad());
+                PS.setString(2, ((Product) object).getSkuCode());
+                PS.setDouble(3, ((Product) object).getPurchaseValue());
+                PS.executeUpdate();
+
+                cn.con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }else if ( object instanceof HProduct){
+            try {
+                PreparedStatement PS = cn.con.prepareStatement("insert into hproducts ( id, name, purchaseValue, saleValue, quantity, uploadDate, skuCode) values (null,?,?,?,?,?,? )");
+                PS.setString(1, ((HProduct) object).getNombre());
+                PS.setDouble(2, ((HProduct) object).getPurchaseValue());
+                PS.setDouble(3, ((HProduct) object).getSaleValue());
+                PS.setInt(4, ((HProduct) object).getCantidad());
+                PS.setString(5, ((HProduct) object).getDate());
+                PS.setString(6, ((HProduct) object).getSkuCode());
                 PS.executeUpdate();
 
                 cn.con.close();
@@ -454,6 +470,8 @@ public class Conexion {
                     order.setCodeSP(datos[0][j]);
                 }else if (campoTabla.equalsIgnoreCase("date")) {
                     order.setDate(datos[0][j]);
+                }else if (campoTabla.equalsIgnoreCase("skuCode")) {
+                    order.setSkuCode(datos[0][j]);
                 }
             }
 
@@ -810,7 +828,7 @@ public class Conexion {
                     }
                     
                     if(primerDato){
-                        producto = new Product(nombre, cantidad, 0, 0);
+                        producto = new Product(nombre, cantidad, 0, "");
                         listaProductos.add(producto);
                     }
  
@@ -1101,25 +1119,46 @@ public class Conexion {
         return 1;
     }
  
-      public static ArrayList<Product> llenarTablaProductos() {
+      public static ArrayList<HProduct> llenarTablaProductos() {
 
         Conexion cn = new Conexion();
         Statement st;
         ResultSet rs;
         StringBuilder contenido = new StringBuilder();
-        Product producto;
-        ArrayList<Product> listaProductos = new ArrayList<>();
+        HProduct producto;
+        ArrayList<HProduct> listaProductos = new ArrayList<>();
         String nombre;
         int    cantidad;
         Double valor;
+        String skuCode;
+        String cadDia;
+        String cadMes;
+        
+        
+        Calendar fecha = Calendar.getInstance();
+        Integer dia = fecha.get(Calendar.DATE);
+        if(dia.toString().length() == 1)
+            cadDia = "0"+dia;
+        else
+            cadDia = dia.toString();
+            
+        Integer mes = fecha.get(Calendar.MONTH)+1;
+        if(mes.toString().length() == 1)
+            cadMes = "0"+mes;
+        else
+            cadMes = mes.toString();
+            
+        int annio = fecha.get(Calendar.YEAR);
+        String date = cadDia+"/"+cadMes+"/"+annio;
         
             try {
                 st = (Statement) cn.con.createStatement();
-                rs = st.executeQuery("select * from horders");
+                rs = st.executeQuery("select * from orders");
                 while (rs.next()) {
                     nombre = rs.getString("itemName");
                     cantidad = rs.getInt("cant");
                     valor = rs.getDouble("value");
+                    skuCode = rs.getString("skuCode");
                     //System.out.println("Value: "+valor);
                     //valor = valor * cantidad;
                     boolean primerDato = true;
@@ -1138,16 +1177,16 @@ public class Conexion {
                     }
                     
                     if(primerDato){
-                        producto = new Product(nombre, cantidad, 0, valor);
+                        producto = new HProduct(nombre, cantidad, 0, valor, date, skuCode);
                      //   insertarDatos(producto, cn);
                         listaProductos.add(producto);
                     }
  
                 }
                 
-                for (Product listaProducto : listaProductos) {
-                    //insertarDatos(listaProducto, cn);
-                    actualizarProductos(listaProducto);
+                for (HProduct listaProducto : listaProductos) {
+                    insertarDatos(listaProducto, cn);
+                  //  actualizarProductos(listaProducto);
                     System.out.println(listaProducto.getCantidad());
                 }
                 
@@ -1162,7 +1201,7 @@ public class Conexion {
         
         return listaProductos;
     }
-      
+      /*
       public static ArrayList<Product> actualizarProductos(Product producto) {
 
         Conexion cn = new Conexion();
@@ -1220,7 +1259,7 @@ public class Conexion {
         
         return listaProductos;
     }
-      
+      */
     public static int buscarProducto(Product producto) {
 
         Conexion cn = new Conexion();
@@ -1822,7 +1861,6 @@ public class Conexion {
                         contadorTmp++;
                     }
                     datos.add(vectorDatosTmp);
-                    crearCliente(encabezadoCampos, vectorDatosTmp, cn);
                     // System.out.println("vector"+vectorDatosTmp[0][2]);
                     contadorDatos = 0;
                     nameAnterior = vectorDatos[0][0];
@@ -1857,8 +1895,10 @@ public class Conexion {
                 }else if (campoTabla.equalsIgnoreCase("name")) {
                     product.setNombre(datos[0][j]);
                     //      System.out.println("datos: "+datos[0][j]);
-                } else if (campoTabla.equalsIgnoreCase("saleValue")) {
-                    product.setSaleValue(Double.parseDouble(datos[0][j]));
+                } else if (campoTabla.equalsIgnoreCase("purchaseValue")) {
+                    product.setPurchaseValue(Double.parseDouble(datos[0][j]));
+                }else if (campoTabla.equalsIgnoreCase("skuCode")) {
+                    product.setSkuCode(datos[0][j]);
                 }
             }
 

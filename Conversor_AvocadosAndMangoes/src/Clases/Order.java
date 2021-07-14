@@ -25,8 +25,9 @@ public class Order {
     private String payment;
     private String comments;
     private String date;
+    private String skuCode;
 
-    public Order(int stop, String codeSP, String shippingPhone, String shippingName, String address, String address2, String city, String postalCode, String itemName, int cant, double value, double total, String payment, String comments, String date) {
+    public Order(int stop, String codeSP, String shippingPhone, String shippingName, String address, String address2, String city, String postalCode, String itemName, int cant, double value, double total, String payment, String comments, String date, String skuCode) {
         this.stop = stop;
         this.codeSP = codeSP;
         this.shippingPhone = shippingPhone;
@@ -42,6 +43,7 @@ public class Order {
         this.payment = payment;
         this.comments = comments;
         this.date = date;
+        this.skuCode = skuCode;
     }
 
     public Order() {
@@ -255,5 +257,19 @@ public class Order {
      */
     public void setDate(String date) {
         this.date = date;
+    }
+    
+    /**
+     * @return the date
+     */
+    public String getSkuCode() {
+        return skuCode;
+    }
+
+    /**
+     * @param skuCode the date to set
+     */
+    public void setSkuCode(String skuCode) {
+        this.skuCode = skuCode;
     }
 }

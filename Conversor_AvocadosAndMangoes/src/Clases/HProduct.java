@@ -9,21 +9,25 @@ package Clases;
  *
  * @author diego
  */
-public class Product {
+public class HProduct {
     private String nombre;
     private int cantidad;
     private double purchaseValue;
+    private double saleValue;
+    private String date;
     private String skuCode;
-    
 
-    public Product(String nombre, int cantidad, double purchaseValue, String skuCode) {
+    public HProduct(String nombre, int cantidad, double purchaseValue, double saleValue, String date, String skuCode ) {
         this.nombre = nombre;
         this.cantidad = cantidad;
         this.purchaseValue = purchaseValue;
+        this.saleValue = saleValue;
+        this.date = date;
         this.skuCode = skuCode;
+       
     }
 
-    public Product() {
+    public HProduct() {
     }
 
     /**
@@ -71,16 +75,45 @@ public class Product {
     /**
      * @return the saleValue
      */
+    public double getSaleValue() {
+        return saleValue;
+    }
+
+    /**
+     * @param saleValue the saleValue to set
+     */
+    public void setSaleValue(double saleValue) {
+        this.saleValue = saleValue;
+    }
+
+    /**
+     * @return the date
+     */
+    public String getDate() {
+        return date;
+    }
+
+    /**
+     * @param date the date to set
+     */
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    /**
+     * @return the skuCode
+     */
     public String getSkuCode() {
         return skuCode;
     }
 
     /**
-     * @param skuCode the saleValue to set
+     * @param skuCode the skuCode to set
      */
     public void setSkuCode(String skuCode) {
         this.skuCode = skuCode;
     }
-
+    
     
 }
+
