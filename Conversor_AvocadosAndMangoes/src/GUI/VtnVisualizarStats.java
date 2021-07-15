@@ -697,7 +697,7 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
             String name = tablaProducts.getValueAt(fila, 0).toString();
             
             sql = "SELECT id, name, purchaseValue, saleValue, quantity "
-                    + "FROM products WHERE name = '"+ name +"'";
+                    + "FROM hproducts WHERE name = '"+ name +"'";
             resSet = prepStat.executeQuery(sql);
             
             while ( resSet.next() )

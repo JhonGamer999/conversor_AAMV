@@ -1133,6 +1133,7 @@ public class Conexion {
         String skuCode;
         String cadDia;
         String cadMes;
+        Double purchaseValue;
         
         
         Calendar fecha = Calendar.getInstance();
@@ -1159,7 +1160,9 @@ public class Conexion {
                     cantidad = rs.getInt("cant");
                     valor = rs.getDouble("value");
                     skuCode = rs.getString("skuCode");
+                    purchaseValue = obtenerValorCompraProducto(nombre);
                     //System.out.println("Value: "+valor);
+                    
                     //valor = valor * cantidad;
                     boolean primerDato = true;
                     
@@ -1177,7 +1180,7 @@ public class Conexion {
                     }
                     
                     if(primerDato){
-                        producto = new HProduct(nombre, cantidad, 0, valor, date, skuCode);
+                        producto = new HProduct(nombre, cantidad, purchaseValue, valor, date, skuCode);
                      //   insertarDatos(producto, cn);
                         listaProductos.add(producto);
                     }
@@ -1200,6 +1203,32 @@ public class Conexion {
           
         
         return listaProductos;
+    }
+      
+     public static Double obtenerValorCompraProducto(String name) {
+
+        Conexion cn = new Conexion();
+        Statement st;
+        ResultSet rs;
+        String    address;
+        Double    purchaseValue = 0.0;
+        
+        try {
+            st = (Statement) cn.con.createStatement();
+            rs = st.executeQuery("select * from products where name = '"+name+"'");
+            while (rs.next()) {
+                
+                purchaseValue = rs.getDouble("purchaseValue");
+                
+            }
+                
+            cn.con.close();
+        } catch (Exception e) {
+             JOptionPane.showMessageDialog(null, "Error trying to read the clients table"+e);
+             return 0.0;
+        }
+        
+        return purchaseValue;
     }
       /*
       public static ArrayList<Product> actualizarProductos(Product producto) {

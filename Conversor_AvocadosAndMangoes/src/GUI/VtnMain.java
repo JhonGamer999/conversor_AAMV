@@ -18,7 +18,7 @@ public class VtnMain extends javax.swing.JFrame {
     
     private VtnOrders orders;
     private VtnClients clients;
-    private VtnVisualizarStats stats;
+    private VtnStats stats;
     public VtnMain() {
         initComponents();
         this.setLocation(250, 80);
@@ -181,7 +181,7 @@ public class VtnMain extends javax.swing.JFrame {
     }//GEN-LAST:event_btnHistorialActionPerformed
 
     private void btnIngEgrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngEgrActionPerformed
-        stats = new VtnVisualizarStats();
+        stats = new VtnStats();
         irA(stats);
     }//GEN-LAST:event_btnIngEgrActionPerformed
 
