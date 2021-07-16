@@ -1230,7 +1230,7 @@ public class Conexion {
         
         return purchaseValue;
     }
-      /*
+      
       public static ArrayList<Product> actualizarProductos(Product producto) {
 
         Conexion cn = new Conexion();
@@ -1248,10 +1248,9 @@ public class Conexion {
         {
             try {
                
-                    PreparedStatement PS = cn.con.prepareStatement("insert into products ( id, name, saleValue, quantity) values (null,?,?,?,? )");
+                    PreparedStatement PS = cn.con.prepareStatement("insert into products ( id, name, purchaseValue) values (null,?,? )");
                     PS.setString(1, producto.getNombre());
-                    PS.setDouble(2, producto.getSaleValue());
-                    PS.setInt(3, producto.getCantidad());
+                    PS.setDouble(2, producto.getPurchaseValue());
                     PS.executeUpdate();
                     //actualizarProductos(listaProductos);
                 cn.con.close();
@@ -1270,11 +1269,10 @@ public class Conexion {
               
                 sql = "UPDATE products SET "
                     + "name = '"+producto.getNombre()+"', "
-                    + "saleValue = '"+producto.getSaleValue()+"', "
-                    + "quantity = '"+quantity+"' "
+                    + "purchaseValue = '"+producto.getPurchaseValue()+"' "
                     + "WHERE name = '"+producto.getNombre()+"'";
             
-           // System.out.println(sql);
+            //System.out.println(sql);
             
                 prepStat.executeUpdate(sql);
                 cn.con.close();
@@ -1288,7 +1286,7 @@ public class Conexion {
         
         return listaProductos;
     }
-      */
+      
     public static int buscarProducto(Product producto) {
 
         Conexion cn = new Conexion();
@@ -1300,13 +1298,14 @@ public class Conexion {
                 st = (Statement) cn.con.createStatement();
                 rs = st.executeQuery("select * from products WHERE name = '"+producto.getNombre()+"'");
                 while (rs.next()) {
-                    retorno = rs.getInt("quantity");
+                    //retorno = rs.getInt("quantity");
+                    retorno = 1;
                     break;
                 }                
                 
                 cn.con.close();
             } catch (Exception e) {
-                 JOptionPane.showMessageDialog(null, "Error conecting to the data base");
+                 JOptionPane.showMessageDialog(null, "Error conecting to the data base"+e);
                  return 2;
             }
             

@@ -71,11 +71,7 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
         spinQuantity = new javax.swing.JSpinner();
         jPanel2 = new javax.swing.JPanel();
         btnVerOrden = new javax.swing.JButton();
-        btnEliminarOrden = new javax.swing.JButton();
-        jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        btnAdicionarOrden = new javax.swing.JButton();
-        jLabel6 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
         btnLimpiarCampos = new javax.swing.JButton();
         jLabel16 = new javax.swing.JLabel();
@@ -149,6 +145,8 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
                 btnRegresarActionPerformed(evt);
             }
         });
+
+        txtSaleValue.setEditable(false);
 
         txtExpense.setText("0.0");
         txtExpense.addActionListener(new java.awt.event.ActionListener() {
@@ -315,32 +313,9 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
             }
         });
 
-        btnEliminarOrden.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/papelera.png"))); // NOI18N
-        btnEliminarOrden.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEliminarOrdenActionPerformed(evt);
-            }
-        });
-
-        jLabel4.setFont(new java.awt.Font("Bookman Old Style", 1, 12)); // NOI18N
-        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel4.setText("Delete");
-
         jLabel5.setFont(new java.awt.Font("Bookman Old Style", 1, 12)); // NOI18N
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel5.setText("Update");
-
-        btnAdicionarOrden.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/masIcon.png"))); // NOI18N
-        btnAdicionarOrden.setPreferredSize(new java.awt.Dimension(67, 50));
-        btnAdicionarOrden.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAdicionarOrdenActionPerformed(evt);
-            }
-        });
-
-        jLabel6.setFont(new java.awt.Font("Bookman Old Style", 1, 12)); // NOI18N
-        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel6.setText("Add");
 
         jLabel15.setFont(new java.awt.Font("Bookman Old Style", 1, 12)); // NOI18N
         jLabel15.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -358,53 +333,36 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addGap(31, 31, 31)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel5)
+                    .addComponent(btnVerOrden, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(51, 51, 51)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(btnAdicionarOrden, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(28, 28, 28)
-                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnVerOrden, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5))
-                .addGap(20, 20, 20)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnEliminarOrden, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(btnLimpiarCampos, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel15)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel6))
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnLimpiarCampos, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btnLimpiarCampos, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnEliminarOrden, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel15)
+                            .addComponent(jLabel5))
                         .addGap(6, 6, 6)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnAdicionarOrden, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnVerOrden, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(btnVerOrden, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jLabel16.setFont(new java.awt.Font("Bookman Old Style", 1, 12)); // NOI18N
         jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel16.setText("Total Purcharse value");
+
+        txtPurchaseValue.setEditable(false);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -420,7 +378,7 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(69, 69, 69)
+                                .addGap(85, 85, 85)
                                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(13, 13, 13)
@@ -549,19 +507,6 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
         ModificarDatosTabla();
         CargarDatosTabla();
     }//GEN-LAST:event_btnVerOrdenActionPerformed
-
-    private void btnEliminarOrdenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarOrdenActionPerformed
-        //Elimina el registro seleccionado de la base de datos
-        EliminarDatosTabla();
-        CargarDatosTabla();
-        limpiarDatos();
-    }//GEN-LAST:event_btnEliminarOrdenActionPerformed
-
-    private void btnAdicionarOrdenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarOrdenActionPerformed
-        AdicionarDatosTabla();
-        CargarDatosTabla();
-        limpiarDatos();
-    }//GEN-LAST:event_btnAdicionarOrdenActionPerformed
 
     private void btnLimpiarCamposActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarCamposActionPerformed
         limpiarDatos();
@@ -763,6 +708,7 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
         Statement prepStat = null;
         Conexion cnx = new Conexion();
         String sql = "";
+        Product producto;
         
         //Variables para adicionar en base de datos
         String id = cmpId.getText();
@@ -775,7 +721,7 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
             
             prepStat = (Statement) cnx.con.createStatement(); 
             
-            sql = "UPDATE products SET "
+            sql = "UPDATE hproducts SET "
                     + "name = '"+name+"', "
                     + "purchaseValue = '"+purchaseValue+"', "
                     + "saleValue = '"+saleValue+"', "
@@ -785,6 +731,9 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
             System.out.println(sql);
             
             prepStat.executeUpdate(sql);
+            
+            producto = new Product(name, 0, Double.parseDouble(purchaseValue), "");
+            Conexion.actualizarProductos(producto);
             
             JOptionPane.showMessageDialog(this, "Product updated in database", "DataBase", 1);
             cnx.con.close();
@@ -836,9 +785,7 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
     
    
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAdicionarOrden;
     private javax.swing.JButton btnCalculate;
-    private javax.swing.JButton btnEliminarOrden;
     private javax.swing.JButton btnLimpiarCampos;
     private javax.swing.JToggleButton btnRegresar;
     private javax.swing.JButton btnVerOrden;
@@ -857,9 +804,7 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel36;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel5;
