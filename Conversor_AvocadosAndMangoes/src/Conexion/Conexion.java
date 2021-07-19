@@ -188,13 +188,14 @@ public class Conexion {
             }
         }else if ( object instanceof HProduct){
             try {
-                PreparedStatement PS = cn.con.prepareStatement("insert into hproducts ( id, name, purchaseValue, saleValue, quantity, uploadDate, skuCode) values (null,?,?,?,?,?,? )");
+                PreparedStatement PS = cn.con.prepareStatement("insert into hproducts ( id, name, purchaseValue, saleValue, quantity, uploadDate, skuCode, week) values (null,?,?,?,?,?,?,? )");
                 PS.setString(1, ((HProduct) object).getNombre());
                 PS.setDouble(2, ((HProduct) object).getPurchaseValue());
                 PS.setDouble(3, ((HProduct) object).getSaleValue());
                 PS.setInt(4, ((HProduct) object).getCantidad());
                 PS.setString(5, ((HProduct) object).getDate());
                 PS.setString(6, ((HProduct) object).getSkuCode());
+                PS.setString(7, ((HProduct) object).getWeek());
                 PS.executeUpdate();
 
                 cn.con.close();
@@ -1119,7 +1120,7 @@ public class Conexion {
         return 1;
     }
  
-      public static ArrayList<HProduct> llenarTablaProductos() {
+      public static ArrayList<HProduct> llenarTablaProductos(String fecha) {
 
         Conexion cn = new Conexion();
         Statement st;
@@ -1134,23 +1135,21 @@ public class Conexion {
         String cadDia;
         String cadMes;
         Double purchaseValue;
+        String fechaPartes[];
+        String week = "";
         
+        fechaPartes = fecha.split("/");
         
-        Calendar fecha = Calendar.getInstance();
-        Integer dia = fecha.get(Calendar.DATE);
-        if(dia.toString().length() == 1)
-            cadDia = "0"+dia;
-        else
-            cadDia = dia.toString();
-            
-        Integer mes = fecha.get(Calendar.MONTH)+1;
-        if(mes.toString().length() == 1)
-            cadMes = "0"+mes;
-        else
-            cadMes = mes.toString();
-            
-        int annio = fecha.get(Calendar.YEAR);
-        String date = cadDia+"/"+cadMes+"/"+annio;
+        if(Integer.parseInt(fechaPartes[0]) <= 7)
+            week = "1";
+        else if(Integer.parseInt(fechaPartes[0]) > 7 && Integer.parseInt(fechaPartes[0]) <= 14)
+            week = "2";
+        else if(Integer.parseInt(fechaPartes[0]) > 14 && Integer.parseInt(fechaPartes[0]) <= 21)
+            week = "3";
+        else if(Integer.parseInt(fechaPartes[0]) > 21 && Integer.parseInt(fechaPartes[0]) <= 28)
+            week = "4";
+        else if(Integer.parseInt(fechaPartes[0]) > 28 )
+            week = "5";
         
             try {
                 st = (Statement) cn.con.createStatement();
@@ -1180,7 +1179,7 @@ public class Conexion {
                     }
                     
                     if(primerDato){
-                        producto = new HProduct(nombre, cantidad, purchaseValue, valor, date, skuCode);
+                        producto = new HProduct(nombre, cantidad, purchaseValue, valor, fecha, skuCode, week);
                      //   insertarDatos(producto, cn);
                         listaProductos.add(producto);
                     }

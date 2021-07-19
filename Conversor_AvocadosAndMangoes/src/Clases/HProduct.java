@@ -16,14 +16,16 @@ public class HProduct {
     private double saleValue;
     private String date;
     private String skuCode;
+    private String week;
 
-    public HProduct(String nombre, int cantidad, double purchaseValue, double saleValue, String date, String skuCode ) {
+    public HProduct(String nombre, int cantidad, double purchaseValue, double saleValue, String date, String skuCode, String week ) {
         this.nombre = nombre;
         this.cantidad = cantidad;
         this.purchaseValue = purchaseValue;
         this.saleValue = saleValue;
         this.date = date;
         this.skuCode = skuCode;
+        this.week = week;
        
     }
 
@@ -112,6 +114,20 @@ public class HProduct {
      */
     public void setSkuCode(String skuCode) {
         this.skuCode = skuCode;
+    }
+
+    /**
+     * @return the week
+     */
+    public String getWeek() {
+        return week;
+    }
+
+    /**
+     * @param week the week to set
+     */
+    public void setWeek(String week) {
+        this.week = week;
     }
     
     

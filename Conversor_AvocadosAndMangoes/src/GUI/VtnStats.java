@@ -160,7 +160,7 @@ public class VtnStats extends javax.swing.JFrame {
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/market_icon.png"))); // NOI18N
 
         classClients.setFont(new java.awt.Font("Bookman Old Style", 1, 24)); // NOI18N
-        classClients.setText("Upload products to orders");
+        classClients.setText("Upload products from orders");
         classClients.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         classClients.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -192,11 +192,15 @@ public class VtnStats extends javax.swing.JFrame {
                 .addGap(66, 66, 66))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(classClients)
-                    .addComponent(exportClients, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(listClients, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(185, 185, 185))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(exportClients, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(listClients, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(185, 185, 185))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(classClients)
+                        .addGap(171, 171, 171))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -306,7 +310,13 @@ public class VtnStats extends javax.swing.JFrame {
 
     private void classClientsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_classClientsActionPerformed
         //Funcion para clasificar los clientes y registrar los resultados en la tabla de clasificacion
-        Conexion.llenarTablaProductos();
+        String fecha = "";
+        
+        fecha = JOptionPane.showInputDialog(this, "Date: (dd/mm/yyyy)");
+        
+        Conexion.llenarTablaProductos(fecha);
+        JOptionPane.showMessageDialog(this, "The products has been upload in a database\n", null, 1);
+        
     }//GEN-LAST:event_classClientsActionPerformed
 
     public void irA(JFrame ventana){
