@@ -29,6 +29,7 @@ import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -69,7 +70,7 @@ public class Conexion {
        // escribirArchivoProductos("C:\\Users\\diego\\Desktop\\Archivos varios\\datosAvocados\\products.csv");
          //escribirArchivoRutas("C:\\Users\\diego\\Desktop\\Archivos varios\\datosAvocados\\rutas.csv");
          //insertarAHistorial();
-        // escribirArchivoHOrdersXFecha("14/05/2021", "14/08/2021", "C:\\Users\\diego\\Desktop\\Archivos varios\\datosAvocados\\horders.csv");
+        escribirArchivoHOrdersXFecha("14/05/2021", "14/08/2021", "C:\\Users\\diego\\Desktop\\Archivos varios\\datosAvocados\\horders.csv");
        // escribirArchivoClientes("C:\\Users\\diego\\Desktop\\Archivos varios\\datosAvocados\\Clientes.csv");
       //  escribirArchivoClientesCambio("C:\\Users\\diego\\Desktop\\Archivos varios\\datosAvocados\\clientesCambio.csv");
        // productos = llenarTablaProductos();
@@ -1935,6 +1936,66 @@ public class Conexion {
         }
         // return order;
     }
+    
+    public static int escribirArchivoEstadisticaXFecha(String fechaDesde, String fechaHasta, String ruta, DefaultTableModel tablaModelo) {
+
+        StringBuilder contenido = new StringBuilder();
+        String [] vecFechaDesde = fechaDesde.split("/");
+        String [] vecFechaHasta = fechaHasta.split("/");
+        String cadLongFechaDesde = vecFechaDesde[2]+vecFechaDesde[1]+vecFechaDesde[0];
+        String cadLongFechaHasta = vecFechaHasta[2]+vecFechaHasta[1]+vecFechaHasta[0];
+        
+        long   longFechaDesde = Long.parseLong(cadLongFechaDesde);
+        long   longFechaHasta = Long.parseLong(cadLongFechaHasta);
+        
+        try {
+            File file = new File(ruta);
+            // Si el archivo no existe es creado
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            FileWriter fw = new FileWriter(file);
+            BufferedWriter bw = new BufferedWriter(fw);
+            String encabezado = "Product;Quantity;SaleValue;PurchaseValue;SaleTotal;PurchaseTotal;Date\n";
+           bw.write(encabezado);
+
+                    
+                    for (int i = 0; i < tablaModelo.getRowCount(); i++) {
+                        String fecha = ""+tablaModelo.getValueAt(i, 6);
+                        String [] vecFecha = fecha.split("/");
+                        String cadLongFecha = vecFecha[2]+vecFecha[1]+vecFecha[0];
+                        long   longFecha = Long.parseLong(cadLongFecha);
+                        
+                        if(longFecha >= longFechaDesde && longFecha <= longFechaHasta)
+                        {
+                            contenido.append(tablaModelo.getValueAt(i, 0));
+                            contenido.append(";");
+                            contenido.append(tablaModelo.getValueAt(i, 1));
+                            contenido.append(";");
+                            contenido.append(tablaModelo.getValueAt(i, 2));
+                            contenido.append(";");
+                            contenido.append(tablaModelo.getValueAt(i, 3));
+                            contenido.append(";");
+                            contenido.append(tablaModelo.getValueAt(i, 4));
+                            contenido.append(";");
+                            contenido.append(tablaModelo.getValueAt(i, 5));
+                            contenido.append(";");
+                            contenido.append(tablaModelo.getValueAt(i, 6));
+
+                            contenido.append("\n");
+                            bw.write(contenido.toString());
+                            contenido = new StringBuilder();
+                        }
+                    }
+            
+            bw.close();
+        } catch (Exception e) {
+             JOptionPane.showMessageDialog(null, "Error trying to write the file, please check the export path");
+             return 0;
+        }
+        
+        return 1;
+      }
       
 }
 
