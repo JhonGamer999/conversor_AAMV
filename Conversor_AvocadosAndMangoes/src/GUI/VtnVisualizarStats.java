@@ -7,6 +7,7 @@ package GUI;
 
 import Clases.Product;
 import Conexion.Conexion;
+import static Conexion.Conexion.escribirArchivoHOrdersXFecha;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Connection;
@@ -15,6 +16,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSetMetaData;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Calendar;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -26,6 +28,7 @@ import javax.swing.table.DefaultTableModel;
 public class VtnVisualizarStats extends javax.swing.JFrame {
     
     private VtnMain main;
+    private VtnStats stats;
     
     public VtnVisualizarStats() {
         initComponents();
@@ -76,6 +79,11 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
         btnLimpiarCampos = new javax.swing.JButton();
         jLabel16 = new javax.swing.JLabel();
         txtPurchaseValue = new javax.swing.JTextField();
+        cmpFromDate = new javax.swing.JTextField();
+        jLabel31 = new javax.swing.JLabel();
+        jLabel32 = new javax.swing.JLabel();
+        cmpToDate = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -147,6 +155,7 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
         });
 
         txtSaleValue.setEditable(false);
+        txtSaleValue.setEnabled(false);
 
         txtExpense.setText("0.0");
         txtExpense.addActionListener(new java.awt.event.ActionListener() {
@@ -299,7 +308,7 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cmpSaleValue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cmpPurchaseValue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(spinQuantity, javax.swing.GroupLayout.DEFAULT_SIZE, 24, Short.MAX_VALUE))
+                    .addComponent(spinQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addGap(27, 27, 27))
         );
 
@@ -355,7 +364,7 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
                             .addComponent(jLabel5))
                         .addGap(6, 6, 6)
                         .addComponent(btnVerOrden, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(11, Short.MAX_VALUE))
         );
 
         jLabel16.setFont(new java.awt.Font("Bookman Old Style", 1, 12)); // NOI18N
@@ -363,6 +372,46 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
         jLabel16.setText("Total Purcharse value");
 
         txtPurchaseValue.setEditable(false);
+        txtPurchaseValue.setEnabled(false);
+
+        cmpFromDate.setFont(new java.awt.Font("Bookman Old Style", 0, 14)); // NOI18N
+        cmpFromDate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmpFromDateActionPerformed(evt);
+            }
+        });
+        cmpFromDate.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                cmpFromDateKeyPressed(evt);
+            }
+        });
+
+        jLabel31.setFont(new java.awt.Font("Bookman Old Style", 1, 12)); // NOI18N
+        jLabel31.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel31.setText("From date (dd/mm/aaaa)");
+
+        jLabel32.setFont(new java.awt.Font("Bookman Old Style", 1, 12)); // NOI18N
+        jLabel32.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel32.setText("To date (dd/mm/aaaa)");
+
+        cmpToDate.setFont(new java.awt.Font("Bookman Old Style", 0, 14)); // NOI18N
+        cmpToDate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmpToDateActionPerformed(evt);
+            }
+        });
+        cmpToDate.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                cmpToDateKeyPressed(evt);
+            }
+        });
+
+        jButton1.setText("Export");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -376,10 +425,23 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(18, 18, 18)
-                                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(34, 34, 34)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(jLabel31, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(cmpFromDate, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(18, 18, 18)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(cmpToDate, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel32, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(85, 85, 85)
-                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGap(123, 123, 123)
+                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(149, 149, 149)
+                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(13, 13, 13)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -436,7 +498,17 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel31)
+                            .addComponent(jLabel32, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(cmpToDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cmpFromDate, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton1)))
                 .addContainerGap(21, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
@@ -461,8 +533,8 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         // TODO add your handling code here:
-        main = new VtnMain();
-        irA(main);
+        stats = new VtnStats();
+        irA(stats);
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void tablaProductsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaProductsMouseClicked
@@ -515,6 +587,43 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
     private void txtExpenseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtExpenseActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtExpenseActionPerformed
+
+    private void cmpFromDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmpFromDateActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmpFromDateActionPerformed
+
+    private void cmpFromDateKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmpFromDateKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmpFromDateKeyPressed
+
+    private void cmpToDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmpToDateActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmpToDateActionPerformed
+
+    private void cmpToDateKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmpToDateKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmpToDateKeyPressed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        String fechaDesde = "";
+        String fechaHasta = "";
+        String rutaArchivo = "";
+        
+        String dia;
+        String mes;
+        String annio;
+        Calendar c1 = Calendar.getInstance();
+        dia = Integer.toString(c1.get(Calendar.DATE));
+        mes = Integer.toString(c1.get(Calendar.MONTH) + 1);
+        annio = Integer.toString(c1.get(Calendar.YEAR));
+        
+        rutaArchivo = JOptionPane.showInputDialog(this, "Export path: ");
+        
+        rutaArchivo = rutaArchivo + "\\statsExp"+dia+mes+annio+".csv";
+        
+        Conexion.escribirArchivoEstadisticaXFecha(fechaDesde, fechaHasta, rutaArchivo, (DefaultTableModel)tablaProducts.getModel());
+    }//GEN-LAST:event_jButton1ActionPerformed
     
     public void irA(JFrame ventana){
         this.dispose();
@@ -529,6 +638,7 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
         Conexion cnx = new Conexion();
         Connection con;
         String sql = "";
+        String where = "";
         double valorTotal = 0.0;
         double valorTotalP = 0.0;
         String totalStr;
@@ -541,9 +651,8 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
             
             int cantCol;
             
-         
             tablaProducts.setModel(tablaModelo);
-            
+
             //Asigna rotulos a la tabla
             tablaModelo.addColumn("Product");
             tablaModelo.addColumn("Quantity");
@@ -552,15 +661,24 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
             tablaModelo.addColumn("SaleTotal");
             tablaModelo.addColumn("PurchaseTotal");
             tablaModelo.addColumn("Date");
+               
             
+//            if ( !cmpFromDate.getText().isEmpty() && !cmpToDate.getText().isEmpty() ){
+//                where = "WHERE uploadDate = '"+cmpFromDate.getText()+"' AND ";
+//            }
+            
+            sql = "select * from hproducts " + where;
+                    
             Object O[]=null;
             int columnas = 0;
-             st = (Statement) cnx.con.createStatement();
-                rs = st.executeQuery("select * from hproducts");
-                while (rs.next()) {
-                   
-                
-                    tablaModelo.addRow(O);
+            st = (Statement) cnx.con.createStatement();
+            rs = st.executeQuery(sql);
+
+            //Where from filter fields
+
+            while (rs.next()) {
+
+                tablaModelo.addRow(O);
                 tablaModelo.setValueAt(rs.getString("name"), columnas, 0);
                 tablaModelo.setValueAt(rs.getInt("quantity"), columnas, 1);
                 tablaModelo.setValueAt(rs.getDouble("saleValue"), columnas, 2);
@@ -568,30 +686,13 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
                 tablaModelo.setValueAt(rs.getDouble("saleValue")*rs.getInt("quantity"), columnas, 4);
                 tablaModelo.setValueAt(rs.getDouble("purchaseValue")*rs.getInt("quantity"), columnas, 5);
                 tablaModelo.setValueAt(rs.getString("uploadDate"), columnas, 6);
-                
+
                 valorTotal = valorTotal + (rs.getDouble("saleValue")*rs.getInt("quantity"));
                 valorTotalP = valorTotalP + (rs.getDouble("purchaseValue")*rs.getInt("quantity"));
                 columnas++;
-                    
-                    
-                }
-            
-            
-            
-            
-            /*
 
-            for (Product producto : productos) {
-                tablaModelo.addRow(O);
-                tablaModelo.setValueAt(producto.getNombre(), columnas, 0);
-                tablaModelo.setValueAt(producto.getCantidad(), columnas, 1);
-                tablaModelo.setValueAt(producto.getPurchaseValue(), columnas, 2);
-                tablaModelo.setValueAt(producto.getSaleValue(), columnas, 3);
-                valorTotal = valorTotal + producto.getPurchaseValue();
-               
-                columnas++;
             }
-            */
+
             
             cnx.con.close();
         } catch (Exception e) {
@@ -796,10 +897,13 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
     private javax.swing.JButton btnLimpiarCampos;
     private javax.swing.JToggleButton btnRegresar;
     private javax.swing.JButton btnVerOrden;
+    private javax.swing.JTextField cmpFromDate;
     private javax.swing.JTextField cmpId;
     private javax.swing.JTextField cmpName;
     private javax.swing.JTextField cmpPurchaseValue;
     private javax.swing.JTextField cmpSaleValue;
+    private javax.swing.JTextField cmpToDate;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
@@ -809,6 +913,8 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel30;
+    private javax.swing.JLabel jLabel31;
+    private javax.swing.JLabel jLabel32;
     private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel36;
     private javax.swing.JLabel jLabel5;
