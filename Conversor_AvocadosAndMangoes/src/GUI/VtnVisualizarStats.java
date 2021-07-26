@@ -551,6 +551,7 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
             tablaModelo.addColumn("PurchaseValue");
             tablaModelo.addColumn("SaleTotal");
             tablaModelo.addColumn("PurchaseTotal");
+            tablaModelo.addColumn("Date");
             
             Object O[]=null;
             int columnas = 0;
@@ -566,6 +567,7 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
                 tablaModelo.setValueAt(rs.getDouble("purchaseValue"), columnas, 3);
                 tablaModelo.setValueAt(rs.getDouble("saleValue")*rs.getInt("quantity"), columnas, 4);
                 tablaModelo.setValueAt(rs.getDouble("purchaseValue")*rs.getInt("quantity"), columnas, 5);
+                tablaModelo.setValueAt(rs.getString("uploadDate"), columnas, 6);
                 
                 valorTotal = valorTotal + (rs.getDouble("saleValue")*rs.getInt("quantity"));
                 valorTotalP = valorTotalP + (rs.getDouble("purchaseValue")*rs.getInt("quantity"));
