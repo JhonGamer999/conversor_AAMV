@@ -622,7 +622,7 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
         
         rutaArchivo = rutaArchivo + "\\statsExp"+dia+mes+annio+".csv";
         
-        Conexion.escribirArchivoEstadisticaXFecha(fechaDesde, fechaHasta, rutaArchivo, (DefaultTableModel)tablaProducts.getModel());
+        Conexion.escribirArchivoEstadisticaXFecha(fechaDesde, fechaHasta, rutaArchivo, tablaProducts);
     }//GEN-LAST:event_jButton1ActionPerformed
     
     public void irA(JFrame ventana){
