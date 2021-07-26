@@ -38,7 +38,7 @@ import javax.swing.table.DefaultTableModel;
 public class Conexion {
 
     private String driver = "com.mysql.cj.jdbc.Driver";
-    private String ipServer = "jdbc:mysql://localhost:3306/";
+    private String ipServer = "jdbc:mysql://localhost:8889/";
     private String baseDatos = "avocadosandmangoes";
     private String user = "root";
     private String contrasena = "root";
@@ -1957,36 +1957,36 @@ public class Conexion {
             FileWriter fw = new FileWriter(file);
             BufferedWriter bw = new BufferedWriter(fw);
             String encabezado = "Product;Quantity;SaleValue;PurchaseValue;SaleTotal;PurchaseTotal;Date\n";
-           bw.write(encabezado);
+            bw.write(encabezado);
 
                     
-                    for (int i = 0; i < tablaModelo.getRowCount(); i++) {
-                        String fecha = ""+tablaModelo.getValueAt(i, 6);
-                        String [] vecFecha = fecha.split("/");
-                        String cadLongFecha = vecFecha[2]+vecFecha[1]+vecFecha[0];
-                        long   longFecha = Long.parseLong(cadLongFecha);
-                        
-                        if(longFecha >= longFechaDesde && longFecha <= longFechaHasta)
-                        {
-                            contenido.append(tablaModelo.getValueAt(i, 0));
-                            contenido.append(";");
-                            contenido.append(tablaModelo.getValueAt(i, 1));
-                            contenido.append(";");
-                            contenido.append(tablaModelo.getValueAt(i, 2));
-                            contenido.append(";");
-                            contenido.append(tablaModelo.getValueAt(i, 3));
-                            contenido.append(";");
-                            contenido.append(tablaModelo.getValueAt(i, 4));
-                            contenido.append(";");
-                            contenido.append(tablaModelo.getValueAt(i, 5));
-                            contenido.append(";");
-                            contenido.append(tablaModelo.getValueAt(i, 6));
+            for (int i = 0; i < tablaModelo.getRowCount(); i++) {
+                String fecha = ""+tablaModelo.getValueAt(i, 6);
+                String [] vecFecha = fecha.split("/");
+                String cadLongFecha = vecFecha[2]+vecFecha[1]+vecFecha[0];
+                long   longFecha = Long.parseLong(cadLongFecha);
 
-                            contenido.append("\n");
-                            bw.write(contenido.toString());
-                            contenido = new StringBuilder();
-                        }
-                    }
+                if(longFecha >= longFechaDesde && longFecha <= longFechaHasta)
+                {
+                    contenido.append(tablaModelo.getValueAt(i, 0));
+                    contenido.append(";");
+                    contenido.append(tablaModelo.getValueAt(i, 1));
+                    contenido.append(";");
+                    contenido.append(tablaModelo.getValueAt(i, 2));
+                    contenido.append(";");
+                    contenido.append(tablaModelo.getValueAt(i, 3));
+                    contenido.append(";");
+                    contenido.append(tablaModelo.getValueAt(i, 4));
+                    contenido.append(";");
+                    contenido.append(tablaModelo.getValueAt(i, 5));
+                    contenido.append(";");
+                    contenido.append(tablaModelo.getValueAt(i, 6));
+
+                    contenido.append("\n");
+                    bw.write(contenido.toString());
+                    contenido = new StringBuilder();
+                }
+            }
             
             bw.close();
         } catch (Exception e) {
