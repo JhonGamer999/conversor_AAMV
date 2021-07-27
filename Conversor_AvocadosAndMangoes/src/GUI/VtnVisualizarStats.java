@@ -77,6 +77,8 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
         btnLimpiarCampos = new javax.swing.JButton();
+        btnLimpiarCampos1 = new javax.swing.JButton();
+        jLabel17 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
         txtPurchaseValue = new javax.swing.JTextField();
         cmpFromDate = new javax.swing.JTextField();
@@ -337,34 +339,55 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
             }
         });
 
+        btnLimpiarCampos1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/filtro_icon.png"))); // NOI18N
+        btnLimpiarCampos1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimpiarCampos1ActionPerformed(evt);
+            }
+        });
+
+        jLabel17.setFont(new java.awt.Font("Bookman Old Style", 1, 12)); // NOI18N
+        jLabel17.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel17.setText("Filter");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGap(31, 31, 31)
+                .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel5)
-                    .addComponent(btnVerOrden, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(51, 51, 51)
+                    .addComponent(btnVerOrden, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnLimpiarCampos, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(25, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(btnLimpiarCampos, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnLimpiarCampos1, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 2, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(16, 16, 16)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnLimpiarCampos, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnLimpiarCampos1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
                             .addComponent(jLabel15)
-                            .addComponent(jLabel5))
-                        .addGap(6, 6, 6)
-                        .addComponent(btnVerOrden, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(11, Short.MAX_VALUE))
+                            .addComponent(jLabel17))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnVerOrden, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnLimpiarCampos, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jLabel16.setFont(new java.awt.Font("Bookman Old Style", 1, 12)); // NOI18N
@@ -388,11 +411,11 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
 
         jLabel31.setFont(new java.awt.Font("Bookman Old Style", 1, 12)); // NOI18N
         jLabel31.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel31.setText("From date (dd/mm/aaaa)");
+        jLabel31.setText("From date (dd/mm/yyyy)");
 
         jLabel32.setFont(new java.awt.Font("Bookman Old Style", 1, 12)); // NOI18N
         jLabel32.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel32.setText("To date (dd/mm/aaaa)");
+        jLabel32.setText("To date (dd/mm/yyyy)");
 
         cmpToDate.setFont(new java.awt.Font("Bookman Old Style", 0, 14)); // NOI18N
         cmpToDate.addActionListener(new java.awt.event.ActionListener() {
@@ -606,8 +629,8 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        String fechaDesde = "";
-        String fechaHasta = "";
+        String fechaDesde = cmpFromDate.getText();
+        String fechaHasta = cmpToDate.getText();
         String rutaArchivo = "";
         
         String dia;
@@ -624,6 +647,11 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
         
         Conexion.escribirArchivoEstadisticaXFecha(fechaDesde, fechaHasta, rutaArchivo, tablaProducts);
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void btnLimpiarCampos1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarCampos1ActionPerformed
+        // TODO add your handling code here:
+        CargarDatosTabla();
+    }//GEN-LAST:event_btnLimpiarCampos1ActionPerformed
     
     public void irA(JFrame ventana){
         this.dispose();
@@ -663,12 +691,8 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
             tablaModelo.addColumn("Date");
                
             
-//            if ( !cmpFromDate.getText().isEmpty() && !cmpToDate.getText().isEmpty() ){
-//                where = "WHERE uploadDate = '"+cmpFromDate.getText()+"' AND ";
-//            }
-            
             sql = "select * from hproducts " + where;
-                    
+            
             Object O[]=null;
             int columnas = 0;
             st = (Statement) cnx.con.createStatement();
@@ -677,20 +701,57 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
             //Where from filter fields
 
             while (rs.next()) {
+                
+                if ( !cmpFromDate.getText().isEmpty() && !cmpToDate.getText().isEmpty() ){
+                 
+                    String fechaDesde = cmpFromDate.getText();
+                    String fechaHasta = cmpToDate.getText();
+                    String [] vecFechaDesde = fechaDesde.split("/");
+                    String [] vecFechaHasta = fechaHasta.split("/");
+                    System.out.println("tamanio:" +vecFechaDesde.length);
+                    String cadLongFechaDesde = vecFechaDesde[2]+vecFechaDesde[1]+vecFechaDesde[0];
+                    String cadLongFechaHasta = vecFechaHasta[2]+vecFechaHasta[1]+vecFechaHasta[0];
 
-                tablaModelo.addRow(O);
-                tablaModelo.setValueAt(rs.getString("name"), columnas, 0);
-                tablaModelo.setValueAt(rs.getInt("quantity"), columnas, 1);
-                tablaModelo.setValueAt(rs.getDouble("saleValue"), columnas, 2);
-                tablaModelo.setValueAt(rs.getDouble("purchaseValue"), columnas, 3);
-                tablaModelo.setValueAt(rs.getDouble("saleValue")*rs.getInt("quantity"), columnas, 4);
-                tablaModelo.setValueAt(rs.getDouble("purchaseValue")*rs.getInt("quantity"), columnas, 5);
-                tablaModelo.setValueAt(rs.getString("uploadDate"), columnas, 6);
+                    long   longFechaDesde = Long.parseLong(cadLongFechaDesde);
+                    long   longFechaHasta = Long.parseLong(cadLongFechaHasta);
+                    
+                    String fecha = rs.getString("uploadDate");
+                    String [] vecFecha = fecha.split("/");
+                    String cadLongFecha = vecFecha[2]+vecFecha[1]+vecFecha[0];
+                    long   longFecha = Long.parseLong(cadLongFecha);
 
-                valorTotal = valorTotal + (rs.getDouble("saleValue")*rs.getInt("quantity"));
-                valorTotalP = valorTotalP + (rs.getDouble("purchaseValue")*rs.getInt("quantity"));
-                columnas++;
+                    if(longFecha >= longFechaDesde && longFecha <= longFechaHasta)
+                    {
+                        tablaModelo.addRow(O);
+                        tablaModelo.setValueAt(rs.getString("name"), columnas, 0);
+                        tablaModelo.setValueAt(rs.getInt("quantity"), columnas, 1);
+                        tablaModelo.setValueAt(rs.getDouble("saleValue"), columnas, 2);
+                        tablaModelo.setValueAt(rs.getDouble("purchaseValue"), columnas, 3);
+                        tablaModelo.setValueAt(rs.getDouble("saleValue")*rs.getInt("quantity"), columnas, 4);
+                        tablaModelo.setValueAt(rs.getDouble("purchaseValue")*rs.getInt("quantity"), columnas, 5);
+                        tablaModelo.setValueAt(rs.getString("uploadDate"), columnas, 6);
 
+                        valorTotal = valorTotal + (rs.getDouble("saleValue")*rs.getInt("quantity"));
+                        valorTotalP = valorTotalP + (rs.getDouble("purchaseValue")*rs.getInt("quantity"));
+                        columnas++;
+                    }
+                }
+                else
+                {
+
+                    tablaModelo.addRow(O);
+                    tablaModelo.setValueAt(rs.getString("name"), columnas, 0);
+                    tablaModelo.setValueAt(rs.getInt("quantity"), columnas, 1);
+                    tablaModelo.setValueAt(rs.getDouble("saleValue"), columnas, 2);
+                    tablaModelo.setValueAt(rs.getDouble("purchaseValue"), columnas, 3);
+                    tablaModelo.setValueAt(rs.getDouble("saleValue")*rs.getInt("quantity"), columnas, 4);
+                    tablaModelo.setValueAt(rs.getDouble("purchaseValue")*rs.getInt("quantity"), columnas, 5);
+                    tablaModelo.setValueAt(rs.getString("uploadDate"), columnas, 6);
+
+                    valorTotal = valorTotal + (rs.getDouble("saleValue")*rs.getInt("quantity"));
+                    valorTotalP = valorTotalP + (rs.getDouble("purchaseValue")*rs.getInt("quantity"));
+                    columnas++;
+                }
             }
 
             
@@ -707,7 +768,14 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
         BigDecimal bd2 = new BigDecimal(valorTotalP).setScale(2, RoundingMode.HALF_UP);
         double val1 = bd2.doubleValue();
         totalStrP = ""+val1;
+        
+        double totalCal = val2 - val1;
+        BigDecimal total = new BigDecimal(totalCal).setScale(2, RoundingMode.HALF_UP);
+        double total1 = total.doubleValue();
+        String totalSP = ""+total1;
       
+        lblTotal.setText(totalSP);
+                
         txtSaleValue.setText(totalStr);
         txtPurchaseValue.setText(totalStrP);
     }
@@ -895,6 +963,7 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCalculate;
     private javax.swing.JButton btnLimpiarCampos;
+    private javax.swing.JButton btnLimpiarCampos1;
     private javax.swing.JToggleButton btnRegresar;
     private javax.swing.JButton btnVerOrden;
     private javax.swing.JTextField cmpFromDate;
@@ -910,6 +979,7 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel30;

@@ -54,7 +54,6 @@ public class VtnStats extends javax.swing.JFrame {
         btnRegresar = new javax.swing.JToggleButton();
         lblAccion = new javax.swing.JLabel();
         listClients = new javax.swing.JToggleButton();
-        exportClients = new javax.swing.JToggleButton();
         jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -82,15 +81,6 @@ public class VtnStats extends javax.swing.JFrame {
         listClients.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 listClientsActionPerformed(evt);
-            }
-        });
-
-        exportClients.setFont(new java.awt.Font("Bookman Old Style", 1, 24)); // NOI18N
-        exportClients.setText("Export Stats");
-        exportClients.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        exportClients.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                exportClientsActionPerformed(evt);
             }
         });
 
@@ -129,7 +119,6 @@ public class VtnStats extends javax.swing.JFrame {
                         .addGap(42, 42, 42)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(listClients, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(exportClients, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(classClients, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 468, Short.MAX_VALUE))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
@@ -166,10 +155,8 @@ public class VtnStats extends javax.swing.JFrame {
                             .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(listClients, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(exportClients, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(classClients, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(classClients, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
@@ -192,26 +179,6 @@ public class VtnStats extends javax.swing.JFrame {
         ppal = new VtnMain();
         irA(ppal);
     }//GEN-LAST:event_btnRegresarActionPerformed
-
-    private void exportClientsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportClientsActionPerformed
-        
-        String rutaArchivo = "";
-        String dia;
-        String mes;
-        String annio;
-        
-        Calendar c1 = Calendar.getInstance();
-        dia = Integer.toString(c1.get(Calendar.DATE));
-        mes = Integer.toString(c1.get(Calendar.MONTH) + 1);
-        annio = Integer.toString(c1.get(Calendar.YEAR));
-        
-        rutaArchivo = JOptionPane.showInputDialog(this, "Export path: ");
-        
-        rutaArchivo = rutaArchivo + "\\clientsExp"+dia+mes+annio+".csv";
-        
-        if(Conexion.escribirArchivoClientes(rutaArchivo) == 1)
-            JOptionPane.showMessageDialog(this, "The file has been exported succesfully \n"+rutaArchivo, null, 1);
-    }//GEN-LAST:event_exportClientsActionPerformed
 
     private void classClientsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_classClientsActionPerformed
         //Funcion para clasificar los clientes y registrar los resultados en la tabla de clasificacion
@@ -511,7 +478,6 @@ public class VtnStats extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToggleButton btnRegresar;
     private javax.swing.JToggleButton classClients;
-    private javax.swing.JToggleButton exportClients;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

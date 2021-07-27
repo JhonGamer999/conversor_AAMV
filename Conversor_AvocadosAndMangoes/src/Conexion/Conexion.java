@@ -39,7 +39,7 @@ import javax.swing.table.DefaultTableModel;
 public class Conexion {
 
     private String driver = "com.mysql.cj.jdbc.Driver";
-    private String ipServer = "jdbc:mysql://localhost:8889/";
+    private String ipServer = "jdbc:mysql://localhost:3306/";
     private String baseDatos = "avocadosandmangoes";
     private String user = "root";
     private String contrasena = "root";
@@ -1943,6 +1943,7 @@ public class Conexion {
         StringBuilder contenido = new StringBuilder();
         String [] vecFechaDesde = fechaDesde.split("/");
         String [] vecFechaHasta = fechaHasta.split("/");
+        System.out.println("tamanio:" +vecFechaDesde.length);
         String cadLongFechaDesde = vecFechaDesde[2]+vecFechaDesde[1]+vecFechaDesde[0];
         String cadLongFechaHasta = vecFechaHasta[2]+vecFechaHasta[1]+vecFechaHasta[0];
         
