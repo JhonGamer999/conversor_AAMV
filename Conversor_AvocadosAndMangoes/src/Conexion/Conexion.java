@@ -102,7 +102,7 @@ public class Conexion {
 
     public static void insertarDatos(Object object, Conexion cn) {
         Conexion cn1 = new Conexion();
-        cn = new Conexion();
+       // cn = new Conexion();
 
         if (object instanceof Client) {
             
@@ -118,8 +118,8 @@ public class Conexion {
                     existe = true;
                  }
                 cn1.con.close();
-                } catch (Exception e) {
-                    System.out.println("Error");
+            } catch (Exception e) {
+                System.out.println("Error");
             }
             
             if(!existe)
@@ -138,18 +138,13 @@ public class Conexion {
                     PS.setString(10, ((Client) object).getClasse());
                     PS.executeUpdate();
 
-                    cn.con.close();
+                   // cn.con.close();
                 } catch (SQLException ex) {
                     Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
             else
             {
-                try {
-                    cn.con.close();
-                } catch (SQLException ex) {
-                    Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
-                }
             }
         } else if (object instanceof Order) {
             try {
@@ -172,7 +167,7 @@ public class Conexion {
                 PS.setString(16, ((Order) object).getSkuCode());
                 PS.executeUpdate();
 
-                cn.con.close();
+             //   cn.con.close();
             } catch (SQLException ex) {
                 Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -184,7 +179,7 @@ public class Conexion {
                 PS.setDouble(3, ((Product) object).getPurchaseValue());
                 PS.executeUpdate();
 
-                cn.con.close();
+               // cn.con.close();
             } catch (SQLException ex) {
                 Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -200,14 +195,14 @@ public class Conexion {
                 PS.setString(7, ((HProduct) object).getWeek());
                 PS.executeUpdate();
 
-                cn.con.close();
+               // cn.con.close();
             } catch (SQLException ex) {
                 Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
 
-    public static ArrayList<String[][]> cargarArchivo(String ruta) {
+    public static ArrayList<String[][]> cargarArchivo(String ruta) throws SQLException {
         
         vaciarTabla();
         Path filePath = Paths.get(ruta);
@@ -319,6 +314,7 @@ public class Conexion {
                     contadorDatos = 0;
                     // System.out.println("Copia"+vectorDatosCopia[0][0]+vectorDatosCopia[0][1]+vectorDatosCopia[0][2]+vectorDatosCopia[0][3]+vectorDatosCopia[0][4]+vectorDatosCopia[0][5]+vectorDatosCopia[0][6]+vectorDatosCopia[0][7]+vectorDatosCopia[0][8]+vectorDatosCopia[0][9]+vectorDatosCopia[0][10]+vectorDatosCopia[0][11]);
                     crearOrden(encabezadoCampos, vectorDatosCopia, cn);
+                    //cn.con.close();
                 } else {
                     // vectorDatosTmp = new String[1][numeroDatos];
                     //Se recorre la lista de campos para agregar solo los campos necesarios
@@ -339,6 +335,7 @@ public class Conexion {
                     }
                     datos.add(vectorDatosTmp);
                     crearOrden(encabezadoCampos, vectorDatosTmp, cn);
+                    //cn.con.close();
                     // System.out.println("vector"+vectorDatosTmp[0][2]);
                     contadorDatos = 0;
                     nameAnterior = vectorDatos[0][0];
@@ -351,6 +348,7 @@ public class Conexion {
         }
         JOptionPane.showMessageDialog(null, "The orders file has been uploaded succesfully");
         //insertarAHistorial();
+      //  cn.con.close();
         return datos;
     }
 
@@ -405,7 +403,7 @@ public class Conexion {
     }
 
     public static void crearOrden(String encabezados[], /*ArrayList<String[][]>*/ String[][] datos,  Conexion cn) {
-        cn = new Conexion();
+       // cn = new Conexion();
         Order order;
         String campoAddress = "";
         String campoTabla = "";
@@ -487,7 +485,7 @@ public class Conexion {
 */
       //     order.setDate(date);
             insertarDatos(order, cn);
-            actualizarClientes(order);
+            actualizarClientes(order, cn);
             // cn.con.close();
         }
         // return order;
@@ -626,7 +624,7 @@ public class Conexion {
                 }
               //  cn.con.close();
             } catch (Exception e) {
-                 JOptionPane.showMessageDialog(null, "Search error trying to get the fields from database");
+                 JOptionPane.showMessageDialog(null, "Search error trying to get the fields from database"+e);
                  return "ErrorBase";
             }
 
@@ -915,8 +913,8 @@ public class Conexion {
     }
     
       
-      public static void actualizarClientes( Order order) {
-        Conexion cn = new Conexion();
+      public static void actualizarClientes( Order order, Conexion cn) {
+       // Conexion cn = new Conexion();
         Statement st;
         ResultSet rs;
         Client client = new Client();
@@ -928,7 +926,7 @@ public class Conexion {
             while (rs.next()) {
                 existe = true;
             }
-            cn.con.close();
+            //cn.con.close();
         } catch (Exception e) {
         }
         
@@ -1139,6 +1137,7 @@ public class Conexion {
         Double purchaseValue;
         String fechaPartes[];
         String week = "";
+        String fechaOrder = "";
         
         fechaPartes = fecha.split("/");
         
@@ -1161,6 +1160,7 @@ public class Conexion {
                     cantidad = rs.getInt("cant");
                     valor = rs.getDouble("value");
                     skuCode = rs.getString("skuCode");
+                    fechaOrder = rs.getString("date");
                     purchaseValue = obtenerValorCompraProducto(nombre);
                     //System.out.println("Value: "+valor);
                     
@@ -1181,7 +1181,8 @@ public class Conexion {
                     }
                     
                     if(primerDato){
-                        producto = new HProduct(nombre, cantidad, purchaseValue, valor, fecha, skuCode, week);
+                     //   producto = new HProduct(nombre, cantidad, purchaseValue, valor, fecha, skuCode, week);
+                     producto = new HProduct(nombre, cantidad, purchaseValue, valor, fechaOrder, skuCode, week);
                      //   insertarDatos(producto, cn);
                         listaProductos.add(producto);
                     }
@@ -1998,6 +1999,133 @@ public class Conexion {
         
         return 1;
       }
+    
+    public static ArrayList<String[][]> cargarArchivoCategorias(String ruta) {
+        
+        vaciarTabla();
+        Path filePath = Paths.get(ruta);
+        String vectorDatos[][];
+        String vectorDatosTmp[][];
+        String vectorDatosCopia[][];
+        ArrayList<String[][]> datos = new ArrayList<>();
+        //ArrayList<String[]> datosRutas = new ArrayList<>();
+        //datosRutas = cargarArchivoRutas(rutaRoutes);
+        //System.out.println(datosRutas.get(0)[0]);
+        Conexion cn = new Conexion();
+        try {
+            BufferedReader bf = Files.newBufferedReader(filePath);
+            String linea;
+            String encabezados = "";
+            String[] encabezadosVector;
+            String[] encabezadoCampos;
+            StringBuilder dato;
+            String nameAnterior = "";
+            int posicionAddress = 0;
+            boolean primeraLinea = true;
+            int numeroDatos = 0;
+            if (primeraLinea) {
+                encabezados = bf.readLine();
+                for (int i = 0; i < encabezados.length(); i++) {
+                    if (encabezados.charAt(i) == ',') {
+                        numeroDatos++;
+                    }
+                }
+            }
+            encabezadosVector = encabezados.split(",");
+            //int campos[] = validarCampos(encabezadosVector, "order");
+            int campos[] = {0,1,2,3,4,5,6};
+            encabezadoCampos = new String[campos.length];
+            for (int i = 0; i < campos.length; i++) {
+                encabezadoCampos[i] = encabezadosVector[campos[i]];
+            }
+
+            vectorDatos = new String[1][numeroDatos+1];
+            int contadorDatos = 0;
+            //Recorremos las lineas del archivo
+            while ((linea = bf.readLine()) != null) {
+                dato = new StringBuilder("");
+                //Recorremos los caracteres de la linea leida
+                for (int i = 0; i < linea.length(); i++) {
+                    //Si la linea leida es igual a una coma es por que viene un nuevo dato
+                    if (linea.charAt(i) == ',') {
+                        //Agregamos el dato al array y formateamos la cadena
+                        vectorDatos[0][contadorDatos] = dato.toString();
+                        contadorDatos++;
+                        dato = new StringBuilder("");
+                        //Se pregunta que el siguiente caracter este dentro de la variable linea
+                        if (i + 1 < linea.length()) {
+                            //Se pregunta si el caracter que sigue a la coma es un '"' esto nos indica que leeremos una cadena
+                            //que puede contener comas en su interior
+                            if (linea.charAt(i + 1) == '"') {
+                                i = i + 2;
+                                while (linea.charAt(i) != '"') {
+                                    dato.append(linea.charAt(i));
+                                    i++;
+                                }
+
+                            } else {
+                                if (linea.charAt(i) != ',') {
+                                    dato.append(linea.charAt(i));
+                                }
+                            }
+                        }
+                    } else {
+                     //   if (linea.charAt(i) != ',') {
+                       //     dato.append(linea.charAt(i));
+                        //}
+                        if (i == 0 && linea.charAt(i) == '"') {
+                                i = i + 1;
+                                while (linea.charAt(i) != '"') {
+                                    dato.append(linea.charAt(i));
+                                    i++;
+                                }
+
+                            }
+                        else if (linea.charAt(i) != ',') {
+                            dato.append(linea.charAt(i));
+                        }
+                        
+                    }
+                }
+                //order.setShippingName(vector[15]);
+                //agreagarDatos(order);
+                // String[] datosLinea = linea.split(",");
+                // System.out.println(datos.get(0));
+                crearCategorias(vectorDatos);
+                contadorDatos = 0;
+            }
+            
+        } catch (IOException e) {
+             JOptionPane.showMessageDialog(null, "An error has occurred reading the file, please check the file path");
+             return null;
+        }
+        JOptionPane.showMessageDialog(null, "The orders file has been uploaded succesfully");
+        //insertarAHistorial();
+        return datos;
+    }
+    
+    public static void crearCategorias(String vectorDatos[][]) {
+        Conexion cn = new Conexion();
+
+            
+            try {
+                PreparedStatement PS = cn.con.prepareStatement("insert into categories ( id, product, tag1, tag2, tag3, tag4, tag5, tag6, tag7) values (null,?,?,?,?,?,?,?,?)");
+                PS.setString(1, vectorDatos[0][0]);
+                PS.setString(2, vectorDatos[0][1]);
+                PS.setString(3, vectorDatos[0][2] );
+                PS.setString(4, vectorDatos[0][3]);
+                PS.setString(5, vectorDatos[0][4]);
+                PS.setString(6, vectorDatos[0][5]);
+                PS.setString(7, vectorDatos[0][6]);
+                PS.setString(8, vectorDatos[0][7]);
+                PS.executeUpdate();
+
+                cn.con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
+            }
+         
+    }
       
 }
 

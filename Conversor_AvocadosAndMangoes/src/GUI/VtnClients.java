@@ -11,9 +11,12 @@ import java.io.File;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -307,7 +310,11 @@ public class VtnClients extends javax.swing.JFrame {
         String rutaOrdenes = dirOrdenes.getText();
         
         if(!rutaOrdenes.equalsIgnoreCase("")){
-            Conexion.cargarArchivo(rutaOrdenes);
+            try {
+                Conexion.cargarArchivo(rutaOrdenes);
+            } catch (SQLException ex) {
+                Logger.getLogger(VtnClients.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         
         dirOrdenes.setText("");

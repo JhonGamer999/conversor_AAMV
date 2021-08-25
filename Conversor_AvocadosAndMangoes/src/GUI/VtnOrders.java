@@ -8,7 +8,10 @@ package GUI;
 import Clases.FieldConfigure;
 import Conexion.Conexion;
 import java.io.File;
+import java.sql.SQLException;
 import java.util.Calendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -351,7 +354,11 @@ public class VtnOrders extends javax.swing.JFrame {
         String rutaRutas = dirRutas.getText();
         
         if(!rutaOrdenes.equalsIgnoreCase("")){
-            Conexion.cargarArchivo(rutaOrdenes);
+            try {
+                Conexion.cargarArchivo(rutaOrdenes);
+            } catch (SQLException ex) {
+                Logger.getLogger(VtnOrders.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         
         if(!rutaRutas.equalsIgnoreCase("")){

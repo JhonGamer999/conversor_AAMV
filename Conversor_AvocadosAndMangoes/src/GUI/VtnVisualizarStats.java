@@ -9,6 +9,11 @@ import Clases.Product;
 import Clases.Table;
 import Conexion.Conexion;
 import static Conexion.Conexion.escribirArchivoHOrdersXFecha;
+import java.awt.Component;
+import java.awt.PopupMenu;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Connection;
@@ -18,6 +23,9 @@ import java.sql.ResultSetMetaData;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Vector;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -57,6 +65,7 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
         
         //Carga de las ordenes de base de datos a la tabla de visualizacion
         CargarDatosTabla();
+        crearComboboxCategoriaPpal();
     }
 
     /**
@@ -119,6 +128,12 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         txtSearchProduct = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
+        boxValor11 = new javax.swing.JComboBox<>();
+        boxCategory = new javax.swing.JComboBox<>();
+        boxSubCategory = new javax.swing.JComboBox<>();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        btnFiltroCategoria = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -509,7 +524,7 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
             }
         });
 
-        ComboBoxGraphics.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Bar", "Circular", "timeSeries", "Candlestick", "Line" }));
+        ComboBoxGraphics.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Bar", "Circular", "Line" }));
 
         jLabel2.setText("Graphics");
 
@@ -532,6 +547,28 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
 
         jLabel6.setText("Search product");
 
+        boxValor11.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Quantity", "SaleValue", "PurchaseValue", "SaleTotal", "PurchaseTotal" }));
+
+        boxCategory.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "---" }));
+        boxCategory.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                boxCategoryItemStateChanged(evt);
+            }
+        });
+
+        boxSubCategory.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "----" }));
+
+        jLabel7.setText("Category");
+
+        jLabel8.setText("Subcategory");
+
+        btnFiltroCategoria.setText("Filter");
+        btnFiltroCategoria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFiltroCategoriaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -549,8 +586,21 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 790, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtSearchProduct, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel6))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(txtSearchProduct, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel6))
+                                        .addGap(18, 18, 18)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(boxCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel7))
+                                        .addGap(18, 18, 18)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel8)
+                                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addComponent(boxSubCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(34, 34, 34)
+                                                .addComponent(btnFiltroCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addGap(18, 18, 18)
@@ -576,7 +626,8 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                     .addComponent(boxValor1, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(jLabel3))
+                                                    .addComponent(jLabel3)
+                                                    .addComponent(boxValor11, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                     .addComponent(jLabel4)
@@ -625,7 +676,9 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
                             .addComponent(ComboBoxGraphics, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(boxValor1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(boxValor2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(7, 7, 7))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(boxValor11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -641,11 +694,17 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
                             .addComponent(lblTotal)
                             .addComponent(btnCalculate, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel6)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel8))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2)
-                    .addComponent(txtSearchProduct, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtSearchProduct, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(boxCategory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(boxSubCategory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnFiltroCategoria))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -798,6 +857,7 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
             double purchaseValue;
             double saleTotal;
             double purchaseTotal;
+            double valorPrecioCosto;
             String date;
             Double valor1 = 0.0;
             
@@ -812,10 +872,11 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
                      purchaseValue = Double.parseDouble(tablaProducts.getValueAt(j, 3).toString());
                      saleTotal = Double.parseDouble(tablaProducts.getValueAt(j, 4).toString());
                      purchaseTotal = Double.parseDouble(tablaProducts.getValueAt(j, 5).toString());
-                     date = tablaProducts.getValueAt(j, 6).toString();
+                     valorPrecioCosto = Double.parseDouble(tablaProducts.getValueAt(j, 6).toString());
+                     date = tablaProducts.getValueAt(j, 7).toString();
                      boolean primerDato = true;
                      
-                     if(tablaProducts.getValueAt(j, 7) != null )
+                     if(tablaProducts.getValueAt(j, 8) != null )
                     {
                             for (int i = 0; i < listaDtsc.size(); i++) {
                                 if(boxValor2.getSelectedItem().toString().equalsIgnoreCase("Date"))
@@ -827,6 +888,7 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
                                         listaDtsc.get(i).setPurchaseValue(listaDtsc.get(i).getPurchaseValue()+purchaseValue);
                                         listaDtsc.get(i).setSaleTotal(listaDtsc.get(i).getSaleTotal()+saleTotal);
                                         listaDtsc.get(i).setPurchaseTotal(listaDtsc.get(i).getPurchaseTotal()+purchaseTotal);
+                                        listaDtsc.get(i).setValorPrecioCosto(listaDtsc.get(i).getValorPrecioCosto()+valorPrecioCosto);
                                         primerDato = false;
                                     }
                                 }
@@ -839,13 +901,14 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
                                         listaDtsc.get(i).setPurchaseValue(listaDtsc.get(i).getPurchaseValue()+purchaseValue);
                                         listaDtsc.get(i).setSaleTotal(listaDtsc.get(i).getSaleTotal()+saleTotal);
                                         listaDtsc.get(i).setPurchaseTotal(listaDtsc.get(i).getPurchaseTotal()+purchaseTotal);
+                                        listaDtsc.get(i).setValorPrecioCosto(listaDtsc.get(i).getValorPrecioCosto()+valorPrecioCosto);
                                         primerDato = false;
                                     }
                                 }
                             } 
                                
                             if(primerDato){
-                                table = new Table(product, quantity, saleValue, purchaseValue, saleTotal, purchaseTotal, date);
+                                table = new Table(product, quantity, saleValue, purchaseValue, saleTotal, purchaseTotal, valorPrecioCosto, date);
                                 listaDtsc.add(table);
                             }
                                     
@@ -875,10 +938,11 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
                      purchaseValue = Double.parseDouble(tablaProducts.getValueAt(j, 3).toString());
                      saleTotal = Double.parseDouble(tablaProducts.getValueAt(j, 4).toString());
                      purchaseTotal = Double.parseDouble(tablaProducts.getValueAt(j, 5).toString());
-                     date = tablaProducts.getValueAt(j, 6).toString();
+                     valorPrecioCosto = Double.parseDouble(tablaProducts.getValueAt(j, 6).toString());
+                     date = tablaProducts.getValueAt(j, 7).toString();
                      boolean primerDato = true;
                      
-                     if(tablaProducts.getValueAt(j, 7) != null )
+                     if(tablaProducts.getValueAt(j, 8) != null )
                     {
                             for (int i = 0; i < listaDtsc.size(); i++) {
                                 if(boxValor2.getSelectedItem().toString().equalsIgnoreCase("Date"))
@@ -890,6 +954,7 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
                                         listaDtsc.get(i).setPurchaseValue(listaDtsc.get(i).getPurchaseValue()+purchaseValue);
                                         listaDtsc.get(i).setSaleTotal(listaDtsc.get(i).getSaleTotal()+saleTotal);
                                         listaDtsc.get(i).setPurchaseTotal(listaDtsc.get(i).getPurchaseTotal()+purchaseTotal);
+                                        listaDtsc.get(i).setValorPrecioCosto(listaDtsc.get(i).getValorPrecioCosto()+valorPrecioCosto);
                                         primerDato = false;
                                     }
                                 }
@@ -902,13 +967,14 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
                                         listaDtsc.get(i).setPurchaseValue(listaDtsc.get(i).getPurchaseValue()+purchaseValue);
                                         listaDtsc.get(i).setSaleTotal(listaDtsc.get(i).getSaleTotal()+saleTotal);
                                         listaDtsc.get(i).setPurchaseTotal(listaDtsc.get(i).getPurchaseTotal()+purchaseTotal);
+                                        listaDtsc.get(i).setValorPrecioCosto(listaDtsc.get(i).getValorPrecioCosto()+valorPrecioCosto);
                                         primerDato = false;
                                     }
                                 }
                             } 
                                
                             if(primerDato){
-                                table = new Table(product, quantity, saleValue, purchaseValue, saleTotal, purchaseTotal, date);
+                                table = new Table(product, quantity, saleValue, purchaseValue, saleTotal, purchaseTotal, valorPrecioCosto, date);
                                 listaDtsc.add(table);
                             }
                                     
@@ -936,10 +1002,11 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
                      purchaseValue = Double.parseDouble(tablaProducts.getValueAt(j, 3).toString());
                      saleTotal = Double.parseDouble(tablaProducts.getValueAt(j, 4).toString());
                      purchaseTotal = Double.parseDouble(tablaProducts.getValueAt(j, 5).toString());
-                     date = tablaProducts.getValueAt(j, 6).toString();
+                     valorPrecioCosto = Double.parseDouble(tablaProducts.getValueAt(j, 6).toString());
+                     date = tablaProducts.getValueAt(j, 7).toString();
                      boolean primerDato = true;
                      
-                     if(tablaProducts.getValueAt(j, 7) != null )
+                     if(tablaProducts.getValueAt(j, 8) != null )
                     {
                             for (int i = 0; i < listaDtsc.size(); i++) {
                                 if(boxValor2.getSelectedItem().toString().equalsIgnoreCase("Date"))
@@ -951,6 +1018,7 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
                                         listaDtsc.get(i).setPurchaseValue(listaDtsc.get(i).getPurchaseValue()+purchaseValue);
                                         listaDtsc.get(i).setSaleTotal(listaDtsc.get(i).getSaleTotal()+saleTotal);
                                         listaDtsc.get(i).setPurchaseTotal(listaDtsc.get(i).getPurchaseTotal()+purchaseTotal);
+                                        listaDtsc.get(i).setValorPrecioCosto(listaDtsc.get(i).getValorPrecioCosto()+valorPrecioCosto);
                                         primerDato = false;
                                     }
                                 }
@@ -963,13 +1031,14 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
                                         listaDtsc.get(i).setPurchaseValue(listaDtsc.get(i).getPurchaseValue()+purchaseValue);
                                         listaDtsc.get(i).setSaleTotal(listaDtsc.get(i).getSaleTotal()+saleTotal);
                                         listaDtsc.get(i).setPurchaseTotal(listaDtsc.get(i).getPurchaseTotal()+purchaseTotal);
+                                        listaDtsc.get(i).setValorPrecioCosto(listaDtsc.get(i).getValorPrecioCosto()+valorPrecioCosto);
                                         primerDato = false;
                                     }
                                 }
                             } 
                                
                             if(primerDato){
-                                table = new Table(product, quantity, saleValue, purchaseValue, saleTotal, purchaseTotal, date);
+                                table = new Table(product, quantity, saleValue, purchaseValue, saleTotal, purchaseTotal, valorPrecioCosto, date);
                                 listaDtsc.add(table);
                             }
                                     
@@ -982,8 +1051,10 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
                     //(Dato valor, etiqueta dato, año(dato de referencia))
                     String etiqueta = obtenerEtiqueta(boxValor2.getSelectedItem().toString(), listaDtsc.get(x));
                     double valor = obtenerValor(boxValor1.getSelectedItem().toString(), listaDtsc.get(x));
+                    double valor2 = obtenerValor(boxValor11.getSelectedItem().toString(), listaDtsc.get(x));
                     System.out.println("Valor:"+ valor);
-                    dtsc.addValue(valor, "Products", etiqueta);
+                    dtsc.addValue(valor, boxValor1.getSelectedItem().toString(), etiqueta);
+                    dtsc.addValue(valor2, boxValor11.getSelectedItem().toString(), etiqueta);
                 }
                 ch = ChartFactory.createLineChart("Line chart", boxValor1.getSelectedItem().toString(),boxValor2.getSelectedItem().toString(),dtsc,PlotOrientation.VERTICAL, true,true,false);
                 cp = new ChartPanel(ch);
@@ -1076,7 +1147,7 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
     private void btnSelectAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectAllActionPerformed
         // TODO add your handling code here:
           for(int i = 0; i < tablaProducts.getRowCount(); i++){
-                tablaProducts.setValueAt(true,i,7);
+                tablaProducts.setValueAt(true,i,8);
             }
         
     }//GEN-LAST:event_btnSelectAllActionPerformed
@@ -1084,7 +1155,7 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
     private void btnUnselectAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUnselectAllActionPerformed
         // TODO add your handling code here:
          for(int i = 0; i < tablaProducts.getRowCount(); i++){
-                tablaProducts.setValueAt(false,i,7);
+                tablaProducts.setValueAt(false,i,8);
             }
     }//GEN-LAST:event_btnUnselectAllActionPerformed
 
@@ -1112,6 +1183,17 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
         elQueOrdena.setRowFilter(RowFilter.regexFilter(productoBusqueda, 0));
         
     }//GEN-LAST:event_txtSearchProductKeyReleased
+
+    private void boxCategoryItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_boxCategoryItemStateChanged
+        // TODO add your handling code here:
+        String categoria = boxCategory.getSelectedItem().toString();
+        crearComboboxCategoriaSub(categoria);
+    }//GEN-LAST:event_boxCategoryItemStateChanged
+
+    private void btnFiltroCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFiltroCategoriaActionPerformed
+        // TODO add your handling code here:
+        filtrarTablaCategoria();
+    }//GEN-LAST:event_btnFiltroCategoriaActionPerformed
     
     public void irA(JFrame ventana){
         this.dispose();
@@ -1126,7 +1208,7 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
         {
          switch(column)
          {
-            case 7:
+            case 8:
                 return Boolean.class;
 
           default:
@@ -1161,6 +1243,7 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
             tablaModelo.addColumn("PurchaseValue");
             tablaModelo.addColumn("SaleTotal");
             tablaModelo.addColumn("PurchaseTotal");
+            tablaModelo.addColumn("%Profitability");
             tablaModelo.addColumn("Date");
             tablaModelo.addColumn("Select");
                
@@ -1203,8 +1286,12 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
                         tablaModelo.setValueAt(rs.getDouble("purchaseValue"), columnas, 3);
                         tablaModelo.setValueAt(rs.getDouble("saleValue")*rs.getInt("quantity"), columnas, 4);
                         tablaModelo.setValueAt(rs.getDouble("purchaseValue")*rs.getInt("quantity"), columnas, 5);
-                        tablaModelo.setValueAt(rs.getString("uploadDate"), columnas, 6);
-                        tablaModelo.setValueAt(false,columnas,7);
+                        if(rs.getDouble("purchaseValue") != 0 && rs.getDouble("saleValue") != 0)
+                            tablaModelo.setValueAt((double)(rs.getDouble("purchaseValue")*rs.getInt("saleValue"))/(rs.getDouble("purchaseValue")), columnas, 6);
+                        else
+                            tablaModelo.setValueAt(0.0, columnas, 6);
+                        tablaModelo.setValueAt(rs.getString("uploadDate"), columnas, 7);
+                        tablaModelo.setValueAt(false,columnas,8);
 
                         valorTotal = valorTotal + (rs.getDouble("saleValue")*rs.getInt("quantity"));
                         valorTotalP = valorTotalP + (rs.getDouble("purchaseValue")*rs.getInt("quantity"));
@@ -1221,7 +1308,12 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
                     tablaModelo.setValueAt(rs.getDouble("purchaseValue"), columnas, 3);
                     tablaModelo.setValueAt(rs.getDouble("saleValue")*rs.getInt("quantity"), columnas, 4);
                     tablaModelo.setValueAt(rs.getDouble("purchaseValue")*rs.getInt("quantity"), columnas, 5);
-                    tablaModelo.setValueAt(rs.getString("uploadDate"), columnas, 6);
+                    tablaModelo.setValueAt((rs.getDouble("purchaseValue")*rs.getInt("saleValue"))/(rs.getDouble("purchaseValue")), columnas, 6);
+                    if(rs.getDouble("purchaseValue") != 0 && rs.getDouble("saleValue") != 0)
+                        tablaModelo.setValueAt((double)(rs.getDouble("purchaseValue")*rs.getInt("saleValue"))/(rs.getDouble("purchaseValue")), columnas, 6);
+                    else
+                        tablaModelo.setValueAt(0.0, columnas, 6);
+                    tablaModelo.setValueAt(rs.getString("uploadDate"), columnas, 7);
 
                     valorTotal = valorTotal + (rs.getDouble("saleValue")*rs.getInt("quantity"));
                     valorTotalP = valorTotalP + (rs.getDouble("purchaseValue")*rs.getInt("quantity"));
@@ -1434,12 +1526,227 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
         spinQuantity.setValue(0);
     }
     
+    public void crearComboboxCategoriaPpal(){
+        
+        Conexion cn = new Conexion();
+        Statement st;
+        ResultSet rs;
+        ArrayList<String> tags = new ArrayList<>();
+        boolean primerTag =  true;
+        String  tag;
+            try {
+                st = (Statement) cn.con.createStatement();
+                rs = st.executeQuery("select * from categories");
+                while (rs.next()) {
+                    tag = rs.getString("tag1");
+                    primerTag = true;
+                    
+                    for (int i = 0; i < tags.size(); i++) {
+                        if(tags.get(i).equalsIgnoreCase(tag))
+                        {
+                            primerTag = false;
+                        }
+                    }
+                    
+                    if(primerTag)
+                    {
+                        if(!tag.isEmpty())
+                             tags.add(tag);
+                    }
+                    
+                }
+                
+                for(int i = 0; i < tags.size(); i++) {
+                    boxCategory.addItem(tags.get(i));
+                }
+                cn.con.close();
+            } catch (Exception e) {
+                 JOptionPane.showMessageDialog(null, "An error has occurred trying to connect to database"+e);
+            }
+            
+    }
+    
+    public void crearComboboxCategoriaSub(String categoriaPpal){
+        
+        Conexion cn = new Conexion();
+        Statement st;
+        ResultSet rs;
+        ArrayList<String> tags = new ArrayList<>();
+        boolean primerTag =  true;
+        String  tag;
+        boxSubCategory.removeAllItems();
+        boxSubCategory.addItem("----");
+            try {
+                st = (Statement) cn.con.createStatement();
+                rs = st.executeQuery("select * from categories where tag1 = '"+categoriaPpal+"'");
+                while (rs.next()) {
+                    tag = rs.getString("tag2");
+                    primerTag = true;
+                    
+                    for (int i = 0; i < tags.size(); i++) {
+                        if(tags.get(i).equalsIgnoreCase(tag))
+                        {
+                            primerTag = false;
+                        }
+                    }
+                    
+                    if(primerTag)
+                    {
+                        if(!tag.isEmpty())
+                             tags.add(tag);
+                    }
+                    
+                }
+                
+                for(int i = 0; i < tags.size(); i++) {
+                   boxSubCategory.addItem(tags.get(i));
+                }
+                cn.con.close();
+            } catch (Exception e) {
+                 JOptionPane.showMessageDialog(null, "An error has occurred trying to connect to database"+e);
+            }
+            
+    }
+    
+    public void filtrarTablaCategoria()
+    {
+        
+        tablaModelo = new DefaultTableModel()
+        {
+         public Class<?> getColumnClass(int column)
+        {
+         switch(column)
+         {
+            case 8:
+                return Boolean.class;
+
+          default:
+            return String.class;
+        }
+      }
+    };
+        Statement st;
+        ResultSet rs;
+        Conexion cnx = new Conexion();
+        Connection con;
+        String sql = "";
+        String where = "";
+        double valorTotal = 0.0;
+        double valorTotalP = 0.0;
+        String totalStr;
+        String totalStrP;
+        
+        ArrayList<Product> productos = new ArrayList<>();
+        
+       // productos = Conexion.llenarTablaProductos();
+        try {
+            
+            int cantCol;
+            
+            tablaProducts.setModel(tablaModelo);
+
+            //Asigna rotulos a la tabla
+            tablaModelo.addColumn("Product");
+            tablaModelo.addColumn("Quantity");
+            tablaModelo.addColumn("SaleValue");
+            tablaModelo.addColumn("PurchaseValue");
+            tablaModelo.addColumn("SaleTotal");
+            tablaModelo.addColumn("PurchaseTotal");
+            tablaModelo.addColumn("%Profitability");
+            tablaModelo.addColumn("Date");
+            tablaModelo.addColumn("Select");
+            
+         
+            sql = "select * from hproducts " + where;
+            
+            Object O[]=null;
+            int columnas = 0;
+            st = (Statement) cnx.con.createStatement();
+            rs = st.executeQuery(sql);
+
+            //Where from filter fields
+
+            while (rs.next()) {
+                
+                if(validarCategoriaProducto(rs.getString("name")) == 1)
+                {
+                    tablaModelo.addRow(O);
+                    tablaModelo.setValueAt(rs.getString("name"), columnas, 0);
+                    tablaModelo.setValueAt(rs.getInt("quantity"), columnas, 1);
+                    tablaModelo.setValueAt(rs.getDouble("saleValue"), columnas, 2);
+                    tablaModelo.setValueAt(rs.getDouble("purchaseValue"), columnas, 3);
+                    tablaModelo.setValueAt(rs.getDouble("saleValue")*rs.getInt("quantity"), columnas, 4);
+                    tablaModelo.setValueAt(rs.getDouble("purchaseValue")*rs.getInt("quantity"), columnas, 5);
+                    tablaModelo.setValueAt((rs.getDouble("purchaseValue")*rs.getInt("saleValue"))/(rs.getDouble("purchaseValue")), columnas, 6);
+                    if(rs.getDouble("purchaseValue") != 0 && rs.getDouble("saleValue") != 0)
+                        tablaModelo.setValueAt((double)(rs.getDouble("purchaseValue")*rs.getInt("saleValue"))/(rs.getDouble("purchaseValue")), columnas, 6);
+                    else
+                        tablaModelo.setValueAt(0.0, columnas, 6);
+                    tablaModelo.setValueAt(rs.getString("uploadDate"), columnas, 7);
+
+                    valorTotal = valorTotal + (rs.getDouble("saleValue")*rs.getInt("quantity"));
+                    valorTotalP = valorTotalP + (rs.getDouble("purchaseValue")*rs.getInt("quantity"));
+                    columnas++;
+                }
+            }
+
+            
+            cnx.con.close();
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
+    }
+    
+    public int validarCategoriaProducto(String producto){
+        Statement st;
+        ResultSet rs;
+        Conexion cnx = new Conexion();
+        Connection con;
+        String sql = "";
+        String where = "";
+        
+        try {
+            
+            if(!boxCategory.getSelectedItem().toString().equalsIgnoreCase("----") && !boxSubCategory.getSelectedItem().toString().equalsIgnoreCase("----"))
+                where = "where tag1 = '"+boxCategory.getSelectedItem().toString()+"' and tag2 = '"+boxSubCategory.getSelectedItem().toString()+"'";
+            else if(!boxCategory.getSelectedItem().toString().equalsIgnoreCase("----"))
+                where = "where tag1 = '"+boxCategory.getSelectedItem().toString()+"'";
+            else if(!boxSubCategory.getSelectedItem().toString().equalsIgnoreCase("----"))
+                where = "where tag2 = '"+boxSubCategory.getSelectedItem().toString()+"'";
+            
+            sql = "select * from categories " + where;
+            
+            Object O[]=null;
+            int columnas = 0;
+            st = (Statement) cnx.con.createStatement();
+            rs = st.executeQuery(sql);
+            
+            while(rs.next())
+            {
+                if(rs.getString("product").equalsIgnoreCase(producto))
+                {
+                    cnx.con.close();
+                    return 1;
+                }
+            }
+            cnx.con.close();
+            return 0;
+        }catch(Exception ex){
+            JOptionPane.showMessageDialog(null, "An error has occurred trying to connect to database"+ex);
+            return 0;
+        }
+    }
+    
    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> ComboBoxGraphics;
+    private javax.swing.JComboBox<String> boxCategory;
+    private javax.swing.JComboBox<String> boxSubCategory;
     private javax.swing.JComboBox<String> boxValor1;
+    private javax.swing.JComboBox<String> boxValor11;
     private javax.swing.JComboBox<String> boxValor2;
     private javax.swing.JButton btnCalculate;
+    private javax.swing.JButton btnFiltroCategoria;
     private javax.swing.JButton btnLimpiarCampos;
     private javax.swing.JButton btnLimpiarCampos1;
     private javax.swing.JToggleButton btnRegresar;
@@ -1475,6 +1782,8 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel5;

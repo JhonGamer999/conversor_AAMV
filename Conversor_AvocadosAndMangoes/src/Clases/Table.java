@@ -17,18 +17,20 @@ public class Table {
     private double purchaseValue;
     private double saleTotal;
     private double purchaseTotal;
+    private double valorPrecioCosto;
     private String date;
 
     public Table() {
     }
 
-    public Table(String product, int quantity, double saleValue, double purchaseValue, double saleTotal, double purchaseTotal, String date ) {
+    public Table(String product, int quantity, double saleValue, double purchaseValue, double saleTotal, double purchaseTotal, double valorPrecioCosto, String date ) {
         this.product = product;
         this.quantity = quantity;
         this.saleValue = saleValue;
         this.purchaseValue = purchaseValue;
         this.saleTotal = saleTotal;
         this.purchaseTotal = purchaseTotal;
+        this.valorPrecioCosto = valorPrecioCosto;
         this.date = date;
     }
 
@@ -128,6 +130,20 @@ public class Table {
      */
     public void setDate(String date) {
         this.date = date;
+    }
+
+    /**
+     * @return the valorPrecioCosto
+     */
+    public double getValorPrecioCosto() {
+        return valorPrecioCosto;
+    }
+
+    /**
+     * @param valorPrecioCosto the valorPrecioCosto to set
+     */
+    public void setValorPrecioCosto(double valorPrecioCosto) {
+        this.valorPrecioCosto = valorPrecioCosto;
     }
 
     
