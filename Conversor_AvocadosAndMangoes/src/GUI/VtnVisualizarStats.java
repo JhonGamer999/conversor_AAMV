@@ -134,6 +134,7 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         btnFiltroCategoria = new javax.swing.JButton();
+        checkAlineacion = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -332,7 +333,7 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel5Layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addGap(0, 1, Short.MAX_VALUE)
                                 .addComponent(jLabel29))
                             .addComponent(spinQuantity))
                         .addGap(28, 28, 28)))
@@ -547,7 +548,7 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
 
         jLabel6.setText("Search product");
 
-        boxValor11.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Quantity", "SaleValue", "PurchaseValue", "SaleTotal", "PurchaseTotal" }));
+        boxValor11.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "----", "Quantity", "SaleValue", "PurchaseValue", "SaleTotal", "PurchaseTotal" }));
 
         boxCategory.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "---" }));
         boxCategory.addItemListener(new java.awt.event.ItemListener() {
@@ -568,6 +569,8 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
                 btnFiltroCategoriaActionPerformed(evt);
             }
         });
+
+        checkAlineacion.setText("Horizontal alignment");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -620,9 +623,10 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
                                                             .addComponent(cmpToDate, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                             .addComponent(jLabel32, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(ComboBoxGraphics, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(jLabel2))
+                                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                    .addComponent(ComboBoxGraphics, 0, 153, Short.MAX_VALUE)
+                                                    .addComponent(jLabel2)
+                                                    .addComponent(checkAlineacion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                     .addComponent(boxValor1, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -677,8 +681,10 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
                             .addComponent(boxValor1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(boxValor2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(boxValor11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(boxValor11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(checkAlineacion))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 6, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -722,7 +728,7 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
                             .addComponent(cmpFromDate, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton1)))
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addContainerGap(19, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
                     .addGap(64, 64, 64)
@@ -921,9 +927,18 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
                 for(int x = 0; x < listaDtsc.size(); x++){
                     String etiqueta = obtenerEtiqueta(boxValor2.getSelectedItem().toString(), listaDtsc.get(x));
                     double valor = obtenerValor(boxValor1.getSelectedItem().toString(), listaDtsc.get(x));
-                    dtsc.setValue(valor, etiqueta, listaDtsc.get(x).getDate());
+                    if(boxValor2.getSelectedItem().toString().equalsIgnoreCase("Product"))
+                        dtsc.setValue(valor, etiqueta, listaDtsc.get(x).getProduct());
+                    else
+                        dtsc.setValue(valor, etiqueta, listaDtsc.get(x).getDate());
                 }
-                ch = ChartFactory.createBarChart3D("Bar 3D", boxValor2.getSelectedItem().toString(), boxValor1.getSelectedItem().toString(), dtsc,PlotOrientation.VERTICAL, true, true, false);
+                
+                PlotOrientation orientacion;
+                if(checkAlineacion.isSelected())
+                    orientacion = PlotOrientation.HORIZONTAL;
+                else
+                    orientacion = PlotOrientation.VERTICAL;
+                ch = ChartFactory.createBarChart3D("Bar 3D", boxValor2.getSelectedItem().toString(), boxValor1.getSelectedItem().toString(), dtsc,orientacion, true, true, false);
                 cp = new ChartPanel(ch);
             }
             else if(ComboBoxGraphics.getSelectedItem().toString().equalsIgnoreCase("Circular"))
@@ -1051,12 +1066,22 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
                     //(Dato valor, etiqueta dato, año(dato de referencia))
                     String etiqueta = obtenerEtiqueta(boxValor2.getSelectedItem().toString(), listaDtsc.get(x));
                     double valor = obtenerValor(boxValor1.getSelectedItem().toString(), listaDtsc.get(x));
-                    double valor2 = obtenerValor(boxValor11.getSelectedItem().toString(), listaDtsc.get(x));
                     System.out.println("Valor:"+ valor);
                     dtsc.addValue(valor, boxValor1.getSelectedItem().toString(), etiqueta);
-                    dtsc.addValue(valor2, boxValor11.getSelectedItem().toString(), etiqueta);
+                    
+                    if(!boxValor11.getSelectedItem().toString().equalsIgnoreCase("----"))
+                    {
+                        double valor2 = obtenerValor(boxValor11.getSelectedItem().toString(), listaDtsc.get(x));
+                        dtsc.addValue(valor2, boxValor11.getSelectedItem().toString(), etiqueta);
+                    }
                 }
-                ch = ChartFactory.createLineChart("Line chart", boxValor1.getSelectedItem().toString(),boxValor2.getSelectedItem().toString(),dtsc,PlotOrientation.VERTICAL, true,true,false);
+                
+                PlotOrientation orientacion;
+                if(checkAlineacion.isSelected())
+                    orientacion = PlotOrientation.HORIZONTAL;
+                else
+                    orientacion = PlotOrientation.VERTICAL;
+                ch = ChartFactory.createLineChart("Line chart", boxValor2.getSelectedItem().toString(),boxValor1.getSelectedItem().toString(),dtsc,orientacion, true,true,false);
                 cp = new ChartPanel(ch);
             }
             graficas.setSize(1200, 700);
@@ -1753,6 +1778,7 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
     private javax.swing.JButton btnSelectAll;
     private javax.swing.JButton btnUnselectAll;
     private javax.swing.JButton btnVerOrden;
+    private javax.swing.JCheckBox checkAlineacion;
     private javax.swing.JTextField cmpFromDate;
     private javax.swing.JTextField cmpId;
     private javax.swing.JTextField cmpName;
