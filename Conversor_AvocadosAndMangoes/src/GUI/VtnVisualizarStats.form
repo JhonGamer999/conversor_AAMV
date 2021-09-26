@@ -73,51 +73,51 @@
                                           </Group>
                                       </Group>
                                   </Group>
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Group type="102" attributes="0">
-                                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                              <Component id="jPanel5" max="32767" attributes="0"/>
-                                              <Component id="jButton2" alignment="0" max="32767" attributes="0"/>
-                                              <Group type="102" alignment="0" attributes="0">
-                                                  <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
-                                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                                      <Component id="jButton1" max="32767" attributes="0"/>
-                                                      <Group type="102" attributes="0">
-                                                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                                              <Component id="jLabel31" max="32767" attributes="0"/>
-                                                              <Component id="cmpFromDate" min="-2" pref="164" max="-2" attributes="0"/>
-                                                          </Group>
-                                                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                                                          <Group type="103" groupAlignment="0" attributes="0">
-                                                              <Component id="cmpToDate" min="-2" pref="173" max="-2" attributes="0"/>
-                                                              <Component id="jLabel32" min="-2" pref="153" max="-2" attributes="0"/>
-                                                          </Group>
-                                                      </Group>
-                                                  </Group>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                      <Component id="jButton2" alignment="0" max="32767" attributes="0"/>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                                  <Component id="ComboBoxGraphics" alignment="0" pref="153" max="32767" attributes="0"/>
+                                                  <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
+                                                  <Component id="checkAlineacion" alignment="0" max="32767" attributes="0"/>
                                               </Group>
+                                              <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
+                                          </Group>
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                              <Component id="boxValor1" alignment="0" pref="129" max="32767" attributes="0"/>
+                                              <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
+                                              <Component id="boxValor11" alignment="0" pref="129" max="32767" attributes="0"/>
+                                              <Component id="boxGroup" alignment="0" max="32767" attributes="0"/>
+                                          </Group>
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
+                                              <Component id="boxValor2" min="-2" pref="129" max="-2" attributes="0"/>
+                                          </Group>
+                                      </Group>
+                                      <Component id="jPanel5" max="32767" attributes="0"/>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                              <Component id="jButton1" max="32767" attributes="0"/>
                                               <Group type="102" alignment="0" attributes="0">
                                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                                      <Component id="ComboBoxGraphics" alignment="0" pref="153" max="32767" attributes="0"/>
-                                                      <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="checkAlineacion" alignment="0" max="32767" attributes="0"/>
+                                                      <Component id="jLabel31" max="32767" attributes="0"/>
+                                                      <Component id="cmpFromDate" min="-2" pref="164" max="-2" attributes="0"/>
                                                   </Group>
-                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <EmptySpace type="separate" max="-2" attributes="0"/>
                                                   <Group type="103" groupAlignment="0" attributes="0">
-                                                      <Component id="boxValor1" alignment="0" min="-2" pref="129" max="-2" attributes="0"/>
-                                                      <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="boxValor11" alignment="0" min="-2" pref="129" max="-2" attributes="0"/>
-                                                  </Group>
-                                                  <EmptySpace max="-2" attributes="0"/>
-                                                  <Group type="103" groupAlignment="0" attributes="0">
-                                                      <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="boxValor2" min="-2" pref="129" max="-2" attributes="0"/>
+                                                      <Component id="cmpToDate" min="-2" pref="173" max="-2" attributes="0"/>
+                                                      <Component id="jLabel32" min="-2" pref="153" max="-2" attributes="0"/>
                                                   </Group>
                                               </Group>
                                           </Group>
                                       </Group>
                                       <Group type="102" alignment="0" attributes="0">
-                                          <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
                                           <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
@@ -211,16 +211,19 @@
                       </Group>
                   </Group>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jButton2" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="txtSearchProduct" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="boxCategory" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="boxSubCategory" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="btnFiltroCategoria" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="boxGroup" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabel9" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
                       <Component id="jScrollPane1" min="-2" pref="375" max="-2" attributes="0"/>
                       <Group type="102" attributes="0">
+                          <Component id="jButton2" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
                           <Component id="jPanel5" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
@@ -238,7 +241,7 @@
                           <Component id="jButton1" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <EmptySpace pref="19" max="32767" attributes="0"/>
+                  <EmptySpace pref="22" max="32767" attributes="0"/>
               </Group>
               <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
@@ -834,12 +837,14 @@
         <Component class="javax.swing.JComboBox" name="boxValor1">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="5">
+              <StringArray count="7">
                 <StringItem index="0" value="Quantity"/>
                 <StringItem index="1" value="SaleValue"/>
-                <StringItem index="2" value="PurchaseValue"/>
+                <StringItem index="2" value="CostPerItem"/>
                 <StringItem index="3" value="SaleTotal"/>
                 <StringItem index="4" value="PurchaseTotal"/>
+                <StringItem index="5" value="Profitability"/>
+                <StringItem index="6" value="Profits"/>
               </StringArray>
             </Property>
           </Properties>
@@ -850,9 +855,8 @@
         <Component class="javax.swing.JComboBox" name="boxValor2">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="2">
-                <StringItem index="0" value="Product"/>
-                <StringItem index="1" value="Date"/>
+              <StringArray count="1">
+                <StringItem index="0" value="Date"/>
               </StringArray>
             </Property>
           </Properties>
@@ -884,13 +888,15 @@
         <Component class="javax.swing.JComboBox" name="boxValor11">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="6">
+              <StringArray count="8">
                 <StringItem index="0" value="----"/>
                 <StringItem index="1" value="Quantity"/>
                 <StringItem index="2" value="SaleValue"/>
-                <StringItem index="3" value="PurchaseValue"/>
+                <StringItem index="3" value="CostPerItem"/>
                 <StringItem index="4" value="SaleTotal"/>
                 <StringItem index="5" value="PurchaseTotal"/>
+                <StringItem index="6" value="Profitability"/>
+                <StringItem index="7" value="Profits"/>
               </StringArray>
             </Property>
           </Properties>
@@ -902,7 +908,7 @@
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
               <StringArray count="1">
-                <StringItem index="0" value="---"/>
+                <StringItem index="0" value="----"/>
               </StringArray>
             </Property>
           </Properties>
@@ -946,6 +952,25 @@
         <Component class="javax.swing.JCheckBox" name="checkAlineacion">
           <Properties>
             <Property name="text" type="java.lang.String" value="Horizontal alignment"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JComboBox" name="boxGroup">
+          <Properties>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+              <StringArray count="3">
+                <StringItem index="0" value="Weeks"/>
+                <StringItem index="1" value="Months"/>
+                <StringItem index="2" value="Years"/>
+              </StringArray>
+            </Property>
+          </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+          </AuxValues>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabel9">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Group by"/>
           </Properties>
         </Component>
       </SubComponents>

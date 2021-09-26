@@ -250,7 +250,7 @@ public class VtnStats extends javax.swing.JFrame {
         //Funcion para clasificar los clientes y registrar los resultados en la tabla de clasificacion
         String fecha = "";
         
-        fecha = JOptionPane.showInputDialog(this, "Date: (dd/mm/yyyy)");
+        //fecha = JOptionPane.showInputDialog(this, "Date: (dd/mm/yyyy)");
         
         Conexion.llenarTablaProductos(fecha);
         JOptionPane.showMessageDialog(this, "The products has been upload in a database\n", null, 1);

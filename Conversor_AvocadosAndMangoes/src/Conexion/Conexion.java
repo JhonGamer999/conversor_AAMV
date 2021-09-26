@@ -26,6 +26,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Formatter;
+import java.util.GregorianCalendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -71,16 +74,20 @@ public class Conexion {
        // escribirArchivoProductos("C:\\Users\\diego\\Desktop\\Archivos varios\\datosAvocados\\products.csv");
          //escribirArchivoRutas("C:\\Users\\diego\\Desktop\\Archivos varios\\datosAvocados\\rutas.csv");
          //insertarAHistorial();
-        escribirArchivoHOrdersXFecha("14/05/2021", "14/08/2021", "C:\\Users\\diego\\Desktop\\Archivos varios\\datosAvocados\\horders.csv");
+        //escribirArchivoHOrdersXFecha("14/05/2021", "14/08/2021", "C:\\Users\\diego\\Desktop\\Archivos varios\\datosAvocados\\horders.csv");
        // escribirArchivoClientes("C:\\Users\\diego\\Desktop\\Archivos varios\\datosAvocados\\Clientes.csv");
       //  escribirArchivoClientesCambio("C:\\Users\\diego\\Desktop\\Archivos varios\\datosAvocados\\clientesCambio.csv");
        // productos = llenarTablaProductos();
-        cargarArchivoProductos("C:\\Users\\diego\\Desktop\\Archivos varios\\datosAvocados\\products1.csv");
+        //cargarArchivoProductos("C:\\Users\\diego\\Desktop\\Archivos varios\\datosAvocados\\products1.csv");
        /*
         for (HProduct producto : productos) {
             System.out.println(producto.getNombre()+";"+producto.getCantidad());
         }*/
-       
+       obtenerSemanaFecha("30/09/2021");
+       obtenerSemanaFecha("27/02/2021");
+       obtenerSemanaFecha("31/12/2021");
+       obtenerSemanaFecha("15/06/2021");
+       obtenerSemanaFecha("27/10/2021");
     }
     
 
@@ -185,19 +192,56 @@ public class Conexion {
             }
         }else if ( object instanceof HProduct){
             try {
-                PreparedStatement PS = cn.con.prepareStatement("insert into hproducts ( id, name, purchaseValue, saleValue, quantity, uploadDate, skuCode, week) values (null,?,?,?,?,?,?,? )");
-                PS.setString(1, ((HProduct) object).getNombre());
-                PS.setDouble(2, ((HProduct) object).getPurchaseValue());
-                PS.setDouble(3, ((HProduct) object).getSaleValue());
-                PS.setInt(4, ((HProduct) object).getCantidad());
-                PS.setString(5, ((HProduct) object).getDate());
-                PS.setString(6, ((HProduct) object).getSkuCode());
-                PS.setString(7, ((HProduct) object).getWeek());
-                PS.executeUpdate();
+                
+                Statement st;
+                ResultSet rs;
+                boolean existe = false;
+                int id = 0;
+                try {
+                    st = (Statement) cn1.con.createStatement();
+                    rs = st.executeQuery("select * from hproducts WHERE name = '"+((HProduct) object).getNombre()+"' and uploadDate = '"+((HProduct) object).getDate()+"'");
+                 
+                    while (rs.next()) {
+                        existe = true;
+                        id = rs.getInt("id");
+                    }
+                    cn1.con.close();
+                } catch (Exception e) {
+                    System.out.println("Error");
+                }
+                
+                if(!existe)
+                {
+                    PreparedStatement PS = cn.con.prepareStatement("insert into hproducts ( id, name, purchaseValue, saleValue, quantity, uploadDate, skuCode, week) values (null,?,?,?,?,?,?,? )");
+                    PS.setString(1, ((HProduct) object).getNombre());
+                    PS.setDouble(2, ((HProduct) object).getPurchaseValue());
+                    PS.setDouble(3, ((HProduct) object).getSaleValue());
+                    PS.setInt(4, ((HProduct) object).getCantidad());
+                    PS.setString(5, ((HProduct) object).getDate());
+                    PS.setString(6, ((HProduct) object).getSkuCode());
+                    PS.setString(7, ((HProduct) object).getWeek());
+                    PS.executeUpdate();
+                }
+                else
+                {
+                    
+                String sql = "";
+                st = (Statement) cn.con.createStatement(); 
+            
+                sql = "UPDATE hproducts SET "
+                    + "purchaseValue = "+((HProduct) object).getPurchaseValue()+", "
+                    + "saleValue = "+((HProduct) object).getSaleValue()+", "
+                    + "quantity = "+((HProduct) object).getCantidad()+" "
+                    + "WHERE id = "+id+"";
+            
+            //System.out.println(sql);
+            
+                st.executeUpdate(sql);
+                }
 
                // cn.con.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (Exception ex) {
+                System.out.println("An error has occurred connecting with database"+ex);
             }
         }
     }
@@ -1138,7 +1182,7 @@ public class Conexion {
         String fechaPartes[];
         String week = "";
         String fechaOrder = "";
-        
+        /*
         fechaPartes = fecha.split("/");
         
         if(Integer.parseInt(fechaPartes[0]) <= 7)
@@ -1151,7 +1195,7 @@ public class Conexion {
             week = "4";
         else if(Integer.parseInt(fechaPartes[0]) > 28 )
             week = "5";
-        
+        */
             try {
                 st = (Statement) cn.con.createStatement();
                 rs = st.executeQuery("select * from orders");
@@ -1167,9 +1211,11 @@ public class Conexion {
                     //valor = valor * cantidad;
                     boolean primerDato = true;
                     
+                    String semana = obtenerSemanaFecha(fechaOrder);
+                    
                     for (int i = 0; i < listaProductos.size(); i++) {
                         
-                        if(listaProductos.get(i).getNombre().equalsIgnoreCase(nombre)){
+                        if(listaProductos.get(i).getNombre().equalsIgnoreCase(nombre) && listaProductos.get(i).getDate().equalsIgnoreCase(semana)){
                             
                             cantidad = cantidad + listaProductos.get(i).getCantidad();
                             listaProductos.get(i).setCantidad(cantidad);
@@ -1182,7 +1228,7 @@ public class Conexion {
                     
                     if(primerDato){
                      //   producto = new HProduct(nombre, cantidad, purchaseValue, valor, fecha, skuCode, week);
-                     producto = new HProduct(nombre, cantidad, purchaseValue, valor, fechaOrder, skuCode, week);
+                        producto = new HProduct(nombre, cantidad, purchaseValue, valor, semana, skuCode, week);
                      //   insertarDatos(producto, cn);
                         listaProductos.add(producto);
                     }
@@ -2033,7 +2079,7 @@ public class Conexion {
             }
             encabezadosVector = encabezados.split(",");
             //int campos[] = validarCampos(encabezadosVector, "order");
-            int campos[] = {0,1,2,3,4,5,6};
+            int campos[] = {0,1,2,3,4,5,6,7,8};
             encabezadoCampos = new String[campos.length];
             for (int i = 0; i < campos.length; i++) {
                 encabezadoCampos[i] = encabezadosVector[campos[i]];
@@ -2087,6 +2133,7 @@ public class Conexion {
                         
                     }
                 }
+                vectorDatos[0][contadorDatos] = dato.toString();
                 //order.setShippingName(vector[15]);
                 //agreagarDatos(order);
                 // String[] datosLinea = linea.split(",");
@@ -2099,32 +2146,214 @@ public class Conexion {
              JOptionPane.showMessageDialog(null, "An error has occurred reading the file, please check the file path");
              return null;
         }
-        JOptionPane.showMessageDialog(null, "The orders file has been uploaded succesfully");
+        JOptionPane.showMessageDialog(null, "The categories file has been uploaded succesfully");
         //insertarAHistorial();
         return datos;
     }
     
     public static void crearCategorias(String vectorDatos[][]) {
         Conexion cn = new Conexion();
-
-            
+        Product producto;
+        
+        if(existeCategoria(vectorDatos[0][0].trim()) != 1)
+        {
             try {
                 PreparedStatement PS = cn.con.prepareStatement("insert into categories ( id, product, tag1, tag2, tag3, tag4, tag5, tag6, tag7) values (null,?,?,?,?,?,?,?,?)");
-                PS.setString(1, vectorDatos[0][0]);
-                PS.setString(2, vectorDatos[0][1]);
-                PS.setString(3, vectorDatos[0][2] );
-                PS.setString(4, vectorDatos[0][3]);
-                PS.setString(5, vectorDatos[0][4]);
-                PS.setString(6, vectorDatos[0][5]);
-                PS.setString(7, vectorDatos[0][6]);
-                PS.setString(8, vectorDatos[0][7]);
+                PS.setString(1, vectorDatos[0][0].trim());
+                PS.setString(2, vectorDatos[0][1].trim());
+                PS.setString(3, vectorDatos[0][2].trim() );
+                PS.setString(4, vectorDatos[0][3].trim());
+                PS.setString(5, vectorDatos[0][4].trim());
+                PS.setString(6, vectorDatos[0][5].trim());
+                PS.setString(7, vectorDatos[0][6].trim());
+                PS.setString(8, vectorDatos[0][7].trim());
                 PS.executeUpdate();
 
                 cn.con.close();
             } catch (SQLException ex) {
                 Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
             }
-         
+        }
+        else
+        {
+            Statement prepStat = null;
+            Conexion cnx = new Conexion();
+            String sql = "";
+        
+            try {
+            
+                prepStat = (Statement) cnx.con.createStatement(); 
+            
+                sql = "UPDATE categories SET "
+                        + "tag1 = '"+vectorDatos[0][1]+"', "
+                        + "tag2 = '"+vectorDatos[0][2]+"', "
+                        + "tag3 = '"+vectorDatos[0][3]+"', "
+                        + "tag4 = '"+vectorDatos[0][4]+"', "
+                        + "tag5 = '"+vectorDatos[0][5]+"', "
+                        + "tag6 = '"+vectorDatos[0][6]+"', "
+                        + "tag7 = '"+vectorDatos[0][7]+"' "
+                        + "WHERE product = '"+vectorDatos[0][0]+"'";
+            
+                System.out.println(sql);
+            
+                prepStat.executeUpdate(sql);
+            
+                cnx.con.close();
+            } catch (Exception e) {
+                System.out.println(e.toString());
+            }
+        }
+        
+        System.out.println("Producto: "+vectorDatos[0][8]);
+        
+        if(!vectorDatos[0][8].equalsIgnoreCase(""))
+            producto = new Product(vectorDatos[0][0], 0, Double.parseDouble(vectorDatos[0][8]), "");
+        else
+             producto = new Product(vectorDatos[0][0], 0, 0, "");
+             
+        actualizarProductos(producto);
+    }
+    
+    
+    public static int existeCategoria(String producto) {
+        Conexion cn = new Conexion();
+        Statement st;
+        ResultSet rs;
+        try {
+            st = (Statement) cn.con.createStatement();
+            //rs = st.executeQuery("insert into products (id, nombre, precio, cantidad) values (3,'cereza', 900,5 )");
+            rs = st.executeQuery("select * from categories where product = '"+producto+"'");
+            while (rs.next()) {
+                //System.out.println(rs.getInt("id") + " " + rs.getString("nombre") + " ");
+                return 1;
+            }
+            cn.con.close();
+        } catch (Exception e) {
+            return 0;
+        }
+        return 0;
+    }
+    
+    
+    public static int existeProducto(String producto) {
+        Conexion cn = new Conexion();
+        Statement st;
+        ResultSet rs;
+        try {
+            st = (Statement) cn.con.createStatement();
+            //rs = st.executeQuery("insert into products (id, nombre, precio, cantidad) values (3,'cereza', 900,5 )");
+            rs = st.executeQuery("select * from products where name = '"+producto+"'");
+            while (rs.next()) {
+                //System.out.println(rs.getInt("id") + " " + rs.getString("nombre") + " ");
+                return 1;
+            }
+            cn.con.close();
+        } catch (Exception e) {
+            return 0;
+        }
+        return 0;
+    }
+    
+    public static String obtenerSemanaFecha(String fecha)
+    {
+        String fechaRetorno;
+        String[] fechaSplit = fecha.split("/");
+        
+        int dia = Integer.parseInt(fechaSplit[0]); 
+        int mes = Integer.parseInt(fechaSplit[1])-1; 
+        int anio = Integer.parseInt(fechaSplit[2]); 
+        
+        int primerDia = 0;
+        int diasMes = 0;
+        
+        int semana2 = 0;
+        int semana3 = 0;
+        int semana4 = 0;
+        int semana5 = 0;
+        
+        Formatter obj = new Formatter();
+       
+       // GregorianCalendar fechaD = new GregorianCalendar(anio, mes, dia);
+        
+        for (int i = 0; i < 7; i++) {
+             Calendar fechaPrimerMier = new GregorianCalendar(anio, mes, i);
+        
+            fechaPrimerMier.add(Calendar.DATE, 1);
+            int diaAct = fechaPrimerMier.get(Calendar.DAY_OF_WEEK);
+            diasMes = fechaPrimerMier.getActualMaximum(Calendar.DAY_OF_MONTH);
+            
+            //System.out.println("Dias meses: "+diasMes);
+           // System.out.println("DiaAct: " + diaAct);
+            if(diaAct == 4)
+            {
+                primerDia = i+1;
+                break;
+            }
+            
+        }
+        
+        
+        semana2 = primerDia + 7;
+        semana3 = semana2 + 7;
+        semana4 = semana3 + 7;
+        semana5 = semana4 + 7;
+        
+        
+        if(dia <= primerDia)
+        {
+            fechaRetorno = ""+String.valueOf(obj.format("%02d/%02d", primerDia, (mes+1)))+"/"+anio;
+        }
+        else if(dia > primerDia && dia <= semana2)
+        {
+            fechaRetorno = ""+String.valueOf(obj.format("%02d/%02d", semana2, (mes+1)))+"/"+anio;
+        }
+        else if(dia > semana2 && dia <= semana3)
+        {
+            fechaRetorno = ""+String.valueOf(obj.format("%02d/%02d", semana3, (mes+1)))+"/"+anio;
+            
+        }
+        else if(dia > semana3 && dia <= semana4)
+        {
+            fechaRetorno = ""+String.valueOf(obj.format("%02d/%02d", semana4, (mes+1)))+"/"+anio;
+        }
+        else if(semana5 <= diasMes && (dia > semana4 && dia <= semana5))
+        {
+            fechaRetorno = ""+String.valueOf(obj.format("%02d/%02d", semana5, (mes+1)))+"/"+anio;
+        }
+        else
+        {
+            int primerDiaSigMes = 0;
+            
+            if(mes == 11)
+            {
+                mes = 0;
+                anio = anio + 1;
+            }
+            else
+            {
+                mes = mes + 1;
+            }
+            
+            for (int i = 0; i < 7; i++) {
+                Calendar fechaPrimerMier = new GregorianCalendar(anio, (mes), i);
+        
+                fechaPrimerMier.add(Calendar.DATE, 1);
+                int diaAct = fechaPrimerMier.get(Calendar.DAY_OF_WEEK);
+                if(diaAct == 4)
+                {
+                    primerDiaSigMes = i+1;
+                    break;
+                }
+            
+        
+            }
+            
+            fechaRetorno = ""+String.valueOf(obj.format("%02d/%02d", primerDiaSigMes, (mes+1)))+"/"+anio;
+        }
+        
+        System.out.println("fechaRetorno: "+fechaRetorno);
+    
+        return fechaRetorno;
     }
       
 }
