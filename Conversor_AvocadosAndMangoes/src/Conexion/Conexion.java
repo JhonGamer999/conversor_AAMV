@@ -2351,7 +2351,7 @@ public class Conexion {
             fechaRetorno = ""+String.valueOf(obj.format("%02d/%02d", primerDiaSigMes, (mes+1)))+"/"+anio;
         }
         
-        System.out.println("fechaRetorno: "+fechaRetorno);
+        //System.out.println("fechaRetorno: "+fechaRetorno);
     
         return fechaRetorno;
     }

@@ -23,6 +23,9 @@ import java.sql.ResultSetMetaData;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.Vector;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -534,7 +537,7 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
 
         boxValor1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Quantity", "SaleValue", "CostPerItem", "SaleTotal", "PurchaseTotal", "Profitability", "Profits" }));
 
-        boxValor2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Date" }));
+        boxValor2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Date", "Category" }));
 
         jLabel3.setText("Value 1");
 
@@ -860,6 +863,58 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
         CargarDatosTabla();
     }//GEN-LAST:event_btnLimpiarCampos1ActionPerformed
 
+    private Date obtenerFechaDeCadena(String date){
+        
+       if(boxGroup.getSelectedItem().equals("Weeks"))
+       {
+            String fechaSplit[] = date.split("/");
+       
+            Date fecha = new Date(Integer.parseInt(fechaSplit[2]), Integer.parseInt(fechaSplit[1]), Integer.parseInt(fechaSplit[0]));
+            return fecha;
+       }
+       else if(boxGroup.getSelectedItem().equals("Months"))
+       {
+            String fechaSplit[] = date.split("-");
+            int mes = 0;
+                   
+            if(fechaSplit[0].contains("01"))
+                mes = 1;
+            else if(fechaSplit[0].contains("02"))
+                mes = 2;
+            else if(fechaSplit[0].contains("03"))
+                mes = 3;
+            else if(fechaSplit[0].contains("04"))
+                mes = 4;
+            else if(fechaSplit[0].contains("05"))
+                mes = 5;
+            else if(fechaSplit[0].contains("06"))
+                mes = 6;
+            else if(fechaSplit[0].contains("07"))
+                mes = 7;
+            else if(fechaSplit[0].contains("08"))
+                mes = 8;
+            else if(fechaSplit[0].contains("09"))
+                mes = 9;
+            else if(fechaSplit[0].contains("11"))
+                mes = 10;
+            else if(fechaSplit[0].contains("11"))
+                mes = 11;
+            else if(fechaSplit[0].contains("12"))
+                mes = 12;
+            
+       
+            Date fecha = new Date(Integer.parseInt(fechaSplit[1]), mes, 0);
+            return fecha;
+       }
+       else if(boxGroup.getSelectedItem().equals("Years"))
+       {
+       
+            Date fecha = new Date(Integer.parseInt(date), 1, 1);
+            return fecha;
+       }
+       return null;
+    }
+    
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
             DefaultCategoryDataset dtsc = new DefaultCategoryDataset();
@@ -877,15 +932,34 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
             double profits;
             double valorPrecioCosto;
             String date;
+            String categoriaProducto;
             Double valor1 = 0.0;
             ArrayList<Table> listaFiltrada = new ArrayList<>();
             
             
             listaFiltrada = filtrarDatos();
             
+            if(boxValor2.getSelectedItem().toString().equalsIgnoreCase("Date"))
+            {
+                Collections.sort(listaFiltrada, new Comparator<Table>() 
+                {@Override
+                public int compare(Table o1, Table o2) { 
+                    if ((o1.getDate()== null || o2.getDate() == null) || (o1.getDate().equalsIgnoreCase("") || o2.getDate().equalsIgnoreCase("")))
+                        return 0; 
+                
+                    Date dateo1 = obtenerFechaDeCadena(o1.getDate());
+                    Date dateo2 = obtenerFechaDeCadena(o2.getDate());
+
+                    return dateo1.compareTo(dateo2); 
+                } });
+            }
+            
             if(ComboBoxGraphics.getSelectedItem().toString().equalsIgnoreCase("Bar"))
             {
                  for(int j = 0; j < listaFiltrada.size(); j++){
+                     
+                     if(listaFiltrada.get(j).getProduct().equalsIgnoreCase("Tip"))
+                         continue;
                      
                      product = listaFiltrada.get(j).getProduct();
                      quantity = listaFiltrada.get(j).getQuantity();
@@ -896,7 +970,11 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
                      valorPrecioCosto = listaFiltrada.get(j).getValorPrecioCosto();
                      date = listaFiltrada.get(j).getDate();
                      profits = listaFiltrada.get(j).getProfits();
+                     categoriaProducto = ObtenerCategoriaPpalDeProducto(product);
                      boolean primerDato = true;
+                     
+                     System.out.println("Producto: "+ product);
+                     System.out.println("Categoria: "+categoriaProducto);
 
                     for (int i = 0; i < listaDtsc.size(); i++) {
                         if(boxValor2.getSelectedItem().toString().equalsIgnoreCase("Date"))
@@ -913,9 +991,9 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
                                 primerDato = false;
                             }
                         }
-                        else
+                        else if(boxValor2.getSelectedItem().toString().equalsIgnoreCase("Category"))
                         {
-                            if(listaDtsc.get(i).getProduct().equalsIgnoreCase(product))
+                            if(listaDtsc.get(i).getDate().equalsIgnoreCase(date))
                             {
                                 listaDtsc.get(i).setQuantity(listaDtsc.get(i).getQuantity()+quantity);
                                 listaDtsc.get(i).setSaleValue(listaDtsc.get(i).getSaleValue()+saleValue);
@@ -926,10 +1004,12 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
                                 listaDtsc.get(i).setValorPrecioCosto(listaDtsc.get(i).getValorPrecioCosto()+valorPrecioCosto);
                                 primerDato = false;
                             }
+                                
                         }
                     } 
 
                     if(primerDato){
+                        
                         table = new Table(product, quantity, saleValue, purchaseValue, saleTotal, purchaseTotal, profits, valorPrecioCosto, date);
                         listaDtsc.add(table);
                     }
@@ -1014,6 +1094,7 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
                     double valor = obtenerValor(boxValor1.getSelectedItem().toString(), listaDtsc.get(x));
                     dataset.setValue(etiqueta, valor);
                 }
+                
                 ch = ChartFactory.createPieChart("Pie chart("+boxGroup.getSelectedItem().toString()+")", dataset);
                 cp = new ChartPanel(ch);
             }
@@ -1160,6 +1241,10 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
            case "Date" :
                valor = tabla.getDate();
               break; 
+              
+            case "Category" :
+               valor = tabla.getDate();
+              break; 
 
            
            default : 
@@ -1189,7 +1274,7 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
     private void btnSelectAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectAllActionPerformed
         // TODO add your handling code here:
           for(int i = 0; i < tablaProducts.getRowCount(); i++){
-                tablaProducts.setValueAt(true,i,8);
+                tablaProducts.setValueAt(true,i,9);
             }
         
     }//GEN-LAST:event_btnSelectAllActionPerformed
@@ -1197,7 +1282,7 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
     private void btnUnselectAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUnselectAllActionPerformed
         // TODO add your handling code here:
          for(int i = 0; i < tablaProducts.getRowCount(); i++){
-                tablaProducts.setValueAt(false,i,8);
+                tablaProducts.setValueAt(false,i,9);
             }
     }//GEN-LAST:event_btnUnselectAllActionPerformed
 
@@ -1906,6 +1991,39 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
         }
     }
     
+    public String ObtenerCategoriaPpalDeProducto(String producto){
+        Statement st;
+        ResultSet rs;
+        Conexion cnx = new Conexion();
+        Connection con;
+        String sql = "";
+        String where = "";
+        String categoria = "";
+        
+        try {
+            
+            where = "where product = '"+producto+"'";
+            
+            sql = "select * from categories " + where;
+            Object O[]=null;
+            int columnas = 0;
+            st = (Statement) cnx.con.createStatement();
+            rs = st.executeQuery(sql);
+            
+            while(rs.next())
+            {
+                    categoria = rs.getString("tag1");
+                    cnx.con.close();
+                    return categoria;
+            }
+            cnx.con.close();
+            return "None";
+        }catch(Exception ex){
+            JOptionPane.showMessageDialog(null, "An error has occurred trying to connect to database"+ex);
+            return "None";
+        }
+    }
+    
     public ArrayList<Table> filtrarDatos()
     {
         
@@ -1940,14 +2058,33 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
             if(tablaProducts.getValueAt(j, 9) != null )
            {
                 for (int i = 0; i < listaDtsc.size(); i++) {
-                    if(boxGroup.getSelectedItem().toString().equalsIgnoreCase("Weeks"))
+                    if(boxValor2.getSelectedItem().toString().equalsIgnoreCase("Category"))
                     {
                         
-                        String semana = Conexion.obtenerSemanaFecha(date);
+                       // String semana = Conexion.obtenerSemanaFecha(date);
                       //  String semanaTable = calcularSemana(listaDtsc.get(i).getDate());
-                        dateTable = semana;
+                        //dateTable = semana;
+                        dateTable = ObtenerCategoriaPpalDeProducto(product);
+                        if(dateTable.equalsIgnoreCase(listaDtsc.get(i).getDate()))
+                        {
+                            listaDtsc.get(i).setQuantity(listaDtsc.get(i).getQuantity()+quantity);
+                            listaDtsc.get(i).setSaleValue(listaDtsc.get(i).getSaleValue()+saleValue);
+                            listaDtsc.get(i).setPurchaseValue(listaDtsc.get(i).getPurchaseValue()+purchaseValue);
+                            listaDtsc.get(i).setSaleTotal(listaDtsc.get(i).getSaleTotal()+saleTotal);
+                            listaDtsc.get(i).setPurchaseTotal(listaDtsc.get(i).getPurchaseTotal()+purchaseTotal);
+                            listaDtsc.get(i).setProfits(listaDtsc.get(i).getProfits()+profits);
+                            listaDtsc.get(i).setValorPrecioCosto(listaDtsc.get(i).getValorPrecioCosto()+valorPrecioCosto);
+                            primerDato = false;
+                        }
+                    }
+                    else if(boxGroup.getSelectedItem().toString().equalsIgnoreCase("Weeks"))
+                    {
                         
-                        if(semana.equalsIgnoreCase(listaDtsc.get(i).getDate()))
+                       // String semana = Conexion.obtenerSemanaFecha(date);
+                      //  String semanaTable = calcularSemana(listaDtsc.get(i).getDate());
+                        //dateTable = semana;
+                        dateTable = date;
+                        if(dateTable.equalsIgnoreCase(listaDtsc.get(i).getDate()))
                         {
                             listaDtsc.get(i).setQuantity(listaDtsc.get(i).getQuantity()+quantity);
                             listaDtsc.get(i).setSaleValue(listaDtsc.get(i).getSaleValue()+saleValue);
@@ -2000,6 +2137,18 @@ public class VtnVisualizarStats extends javax.swing.JFrame {
                 } 
 
                 if(primerDato){
+                    if(listaDtsc.size() == 0)
+                    {
+                        if(boxValor2.getSelectedItem().toString().equalsIgnoreCase("Category"))
+                             dateTable = ObtenerCategoriaPpalDeProducto(product);
+                        else if(boxGroup.getSelectedItem().toString().equalsIgnoreCase("Weeks"))
+                            dateTable = date;
+                        else if(boxGroup.getSelectedItem().toString().equalsIgnoreCase("Months"))
+                            dateTable = calcularMes(date);
+                        else if(boxGroup.getSelectedItem().toString().equalsIgnoreCase("Years"))
+                            dateTable = calcularAnio(date);
+                    }
+                        
                     table = new Table(product, quantity, saleValue, purchaseValue, saleTotal, purchaseTotal, profits, valorPrecioCosto, dateTable);
                     listaDtsc.add(table);
                 }
